@@ -13,16 +13,16 @@ class ArticleSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'date_joined')
+        fields = ('id', 'username', 'date_joined')
 
 
 class DuelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Duel
-        fields = ('__all__')
+        fields = ('user1', 'user2', 'dataset', 'date_added')
 
 
 class DatasetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dataset
-        fields = ('__all__')
+        fields = ('id', 'name')
