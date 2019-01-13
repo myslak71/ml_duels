@@ -75,15 +75,21 @@ class DuelCreateView(CreateAPIView):
 
 
 class DuelUpdateView(CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
-    permission_classes = (permissions.IsAuthenticated,)
 
 
-class UserDuelListView(ListAPIView):
+class DuelUserListView(ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         self.queryset = Duel.objects.all().filter(Q(user1=self.request.user.pk) | Q(user2=self.request.user.pk))
         serialzer = DuelSerializer(self.queryset, many=True)
         return Response(serialzer.data)
+
+
+class DuelDetailView(RetrieveAPIView):
+    queryset = Duel.objects.all()
+    serializer_class = DuelSerializer
+    permission_classes = (permissions.IsAuthenticated,)

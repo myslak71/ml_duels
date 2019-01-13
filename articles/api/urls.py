@@ -13,7 +13,7 @@ from .views import (
     ArticleCreateView,
     ArticleUpdateView,
     ArticleDeleteView,
-    DuelCreateView, UserListView, DatasetListView, DatasetDetailView, UserDuelListView)
+    DuelCreateView, UserListView, DatasetListView, DatasetDetailView, DuelUserListView, DuelDetailView)
 
 urlpatterns = [
     path('', ArticleListView.as_view()),
@@ -23,8 +23,14 @@ urlpatterns = [
     path('<pk>/delete/', ArticleDeleteView.as_view()),
 
     path('duel/create/', DuelCreateView.as_view()),
+    path('duel/user/', DuelUserListView.as_view()),
+    path('duel/<pk>', DuelDetailView.as_view()),
+
     path('dataset/', DatasetListView.as_view()),
     path('dataset/<pk>', DatasetDetailView.as_view()),
+
     path('user/', UserListView.as_view()),
-    path('user/duel', UserDuelListView.as_view()),
+    path('user/', UserListView.as_view()),
+
+
 ]
