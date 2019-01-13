@@ -28,11 +28,11 @@ class Duel(models.Model):
     user1_percentage = ArrayField(
         models.DecimalField(decimal_places=4, max_digits=6, validators=[MinValueValidator(0), MaxValueValidator]),
         size=3,
-        blank=True)
+        null=True)
     user2_percentage = ArrayField(
         models.DecimalField(decimal_places=4, max_digits=6, validators=[MinValueValidator(0), MaxValueValidator]),
         size=3,
-        blank=True)
+        null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
 
@@ -40,3 +40,6 @@ class Dataset(models.Model):
     name = models.CharField(max_length=64)
     dataset = models.FileField(upload_to='datasets', default='')
     date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

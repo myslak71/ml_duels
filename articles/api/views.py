@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.db.models import Q
 from rest_framework import permissions
 from rest_framework.generics import (
     ListAPIView,
@@ -44,7 +45,7 @@ class ArticleDeleteView(DestroyAPIView):
 
 
 class UserListView(ListAPIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         UserListView.queryset = User.objects.all().exclude(pk=request.user.pk)
@@ -55,13 +56,34 @@ class UserListView(ListAPIView):
 class DatasetListView(ListAPIView):
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+
+class DatasetDetailView(RetrieveAPIView):
+    queryset = Dataset.objects.all()
+    serializer_class = DatasetSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
 
 class DuelCreateView(CreateAPIView):
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(user2=self.request.user)
 
 
 class DuelUpdateView(CreateAPIView):
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+
+class UserDuelListView(ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        self.queryset = Duel.objects.all().filter(Q(user1=self.request.user.pk) | Q(user2=self.request.user.pk))
+        serialzer = DuelSerializer(self.queryset, many=True)
+        return Response(serialzer.data)
