@@ -64,6 +64,12 @@ class DatasetDetailView(RetrieveAPIView):
     serializer_class = DatasetSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
+class DatasetCreateView(CreateAPIView):
+    queryset = Dataset.objects.all()
+    serializer_class = DatasetSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    # def perform_create(self, serializer):
 
 class DuelCreateView(CreateAPIView):
     queryset = Duel.objects.all()
