@@ -1,3 +1,7 @@
+import csv
+import json
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -26,3 +30,10 @@ class DatasetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dataset
         fields = ('id', 'name', 'dataset')
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        if self.context.get('data'):
+            json_data = [json.dumps(d) for d in csv.DictReader(open(f'{settings.MEDIA_ROOT}/{instance.dataset}'))]
+            ret['data'] = json_data
+        return ret
