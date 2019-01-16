@@ -14,6 +14,8 @@ const IconText = ({type, text}) => (
 );
 
 const Duels = props => {
+            console.log(props.data)
+
     return (
         <List
             itemLayout="vertical"

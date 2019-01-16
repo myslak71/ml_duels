@@ -8,7 +8,7 @@ const FormItem = Form.Item;
 
 class CustomForm extends React.Component {
 
-  handleFormSubmit = async (event, requestType, articleID) => {
+  handleFormSubmit = async (event, requestType, duelID) => {
     event.preventDefault();
 
     const postObj = {

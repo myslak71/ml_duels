@@ -6,7 +6,8 @@ import CustomForm from "../components/Form";
 
 class DuelList extends React.Component {
     state = {
-        duels: []
+        duels: [],
+        users: []
     };
 
     fetchDuels = () => {
@@ -19,8 +20,19 @@ class DuelList extends React.Component {
             });
     }
 
+    fetchUsers = () => {
+        axios.get("http://127.0.0.1:8000/api/user/",
+            {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
+            .then(res => {
+                this.setState({
+                    users: res.data
+                });
+            });
+    }
+
     componentDidMount() {
         this.fetchDuels();
+        this.fetchUsers();
     }
 
     componentWillReceiveProps(newProps) {
@@ -32,7 +44,7 @@ class DuelList extends React.Component {
     render() {
         return (
             <div>
-                <Duels data={this.state.duels}/> <br/>
+                <Duels data={this.state} users={this.state.users}/> <br/>
                 <h2> Add duel </h2>
                 <CustomForm requestType="post" articleID={null} btnText="Create"/>
             </div>

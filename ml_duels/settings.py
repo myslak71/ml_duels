@@ -109,6 +109,7 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
     '127.0.0.1:3000',
+    'https://ml-duels.herokuapp.com',
 )
 
 CSRF_COOKIE_NAME = "csrftoken"
