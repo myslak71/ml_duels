@@ -32,7 +32,4 @@ urlpatterns = [
     path('dataset/create/', DatasetCreateView().as_view()),
 
     path('user/', UserListView.as_view()),
-    path('user/', UserListView.as_view()),
-
-
 ]

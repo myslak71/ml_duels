@@ -17,7 +17,7 @@ const Duels = props => {
     return (
         <List
             itemLayout="vertical"
-            size="large"
+            size="small"
             pagination={{
                 onChange: page => {
                     console.log(page);

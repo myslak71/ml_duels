@@ -33,7 +33,7 @@ class DuelList extends React.Component {
         return (
             <div>
                 <Duels data={this.state.duels}/> <br/>
-                <h2> Create an article </h2>
+                <h2> Add duel </h2>
                 <CustomForm requestType="post" articleID={null} btnText="Create"/>
             </div>
         );
