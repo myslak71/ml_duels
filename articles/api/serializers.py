@@ -23,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
 class DuelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Duel
-        fields = ('user1', 'user2', 'dataset', 'date_added')
+        fields = ('__all__')
 
 
 class DatasetSerializer(serializers.ModelSerializer):
