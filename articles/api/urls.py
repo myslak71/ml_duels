@@ -1,8 +1,8 @@
-# from articles.api.views import ArticleViewSet
+# from duels.api.views import ArticleViewSet
 # from rest_framework.routers import DefaultRouter
 
 # router = DefaultRouter()
-# router.register(r'', ArticleViewSet, base_name='articles')
+# router.register(r'', ArticleViewSet, base_name='duels')
 # urlpatterns = router.urls
 
 from django.urls import path
@@ -13,7 +13,8 @@ from .views import (
     ArticleCreateView,
     ArticleUpdateView,
     ArticleDeleteView,
-    DuelCreateView, UserListView, DatasetListView, DatasetDetailView, DuelUserListView, DuelDetailView)
+    DuelCreateView, UserListView, DatasetListView, DatasetDetailView, DuelUserListView, DuelDetailView,
+    DatasetCreateView)
 
 urlpatterns = [
     path('', ArticleListView.as_view()),
@@ -28,6 +29,7 @@ urlpatterns = [
 
     path('dataset/', DatasetListView.as_view()),
     path('dataset/<pk>', DatasetDetailView.as_view()),
+    path('dataset/create/', DatasetCreateView().as_view()),
 
     path('user/', UserListView.as_view()),
     path('user/', UserListView.as_view()),
