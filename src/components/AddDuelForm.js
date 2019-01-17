@@ -1,5 +1,5 @@
 import React from "react";
-import {Form, Input, Button, Select} from "antd";
+import {Form, Button, Select} from "antd";
 import {connect} from "react-redux";
 import axios from "axios";
 
@@ -41,8 +41,6 @@ class AddDuelForm extends React.Component {
     };
 
     render() {
-        console.log('jo', this.props.users)
-        console.log('data', this.props.datasets)
         return (
             <div>
                 <Form
@@ -54,19 +52,16 @@ class AddDuelForm extends React.Component {
                         )
                     }
                 >
-                    <FormItem label="User"><Select>
+                    <FormItem label="User"><Select name="user1">
                         {this.props.users.map(user => <Select.Option
                             value={user.username}>{user.username}</Select.Option>)}
                     </Select></FormItem>
 
-                    <FormItem label="Dataset"><Select>
-                        {this.props.datasets.map(user => <Select.Option
-                            value={user.username}>{user.name}</Select.Option>)}
+                    <FormItem label="Dataset"><Select name="dataset">
+                        {this.props.datasets.map(dataset => <Select.Option
+                            value={dataset.username}>{dataset.name}</Select.Option>)}
                     </Select></FormItem>
 
-                    <FormItem label="Content">
-                        <Input name="content" placeholder="Enter some content ..."/>
-                    </FormItem>
                     <FormItem>
                         <Button type="primary" htmlType="submit">
                             {this.props.btnText}

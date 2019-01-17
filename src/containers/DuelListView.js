@@ -62,7 +62,7 @@ class DuelList extends React.Component {
                 <Duels data={this.state.duels}/> <br/>
                 <h2> Add duel </h2>
                 <AddDuelForm users={this.state.users} datasets={this.state.datasets} requestType="post" articleID={null}
-                             btnText="Create"/>
+                             btnText="Challenge"/>
             </div>
         );
     }
