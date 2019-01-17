@@ -7,15 +7,25 @@ const FormItem = Form.Item;
 
 
 class AddDuelForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            user1: null,
+            dataset: null
+        };
+        this.handleUserChange = this.handleUserChange.bind(this)
+        this.handleUserDataset = this.handleUserDataset.bind(this)
+    }
+
 
     handleFormSubmit = async (event, requestType, duelID) => {
+        console.log(this.state)
         event.preventDefault();
 
         const postObj = {
-            title: event.target.elements.title.value,
-            content: event.target.elements.content.value
+            user1: event.target.elements.user1.value,
+            dataset: event.target.elements.dataset.value
         };
-
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
         axios.defaults.headers = {
@@ -40,6 +50,14 @@ class AddDuelForm extends React.Component {
         }
     };
 
+    handleUserChange(value) {
+        this.setState({user1: value})
+    }
+
+    handleUserDataset(value) {
+        this.setState({dataset: value})
+    }
+
     render() {
         return (
             <div>
@@ -52,7 +70,7 @@ class AddDuelForm extends React.Component {
                         )
                     }
                 >
-                    <FormItem label="User"><Select name="user1">
+                    <FormItem label="User"><Select name="user1" onChange={this.handleUserChange}>
                         {this.props.users.map(user => <Select.Option
                             value={user.username}>{user.username}</Select.Option>)}
                     </Select></FormItem>

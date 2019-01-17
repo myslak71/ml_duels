@@ -10,7 +10,7 @@ class CustomForm extends React.Component {
   
   handleFormSubmit = async (event, requestType, articleID) => {
     event.preventDefault();
-
+    console.log(event.target.elements)
     const postObj = {
       title: event.target.elements.title.value,
       content: event.target.elements.content.value
@@ -46,7 +46,6 @@ class CustomForm extends React.Component {
         <Form
           onSubmit={event =>
             this.handleFormSubmit(
-              event,
               this.props.requestType,
               this.props.articleID
             )
