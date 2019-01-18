@@ -79,11 +79,15 @@ class DatasetCreateView(CreateAPIView):
 class DuelCreateView(CreateAPIView):
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def perform_create(self, serializer):
         serializer.save(user2=self.request.user)
 
+    # def post(self, request, *args, **kwargs):
+    #     print(request.data)
+    #     super(DuelCreateView)
 
 class DuelUpdateView(CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -97,8 +101,8 @@ class DuelUserListView(ListAPIView):
     # TODO filter duels with same user and dataset
     def get(self, request, *args, **kwargs):
         self.queryset = Duel.objects.all().filter(Q(user1=self.request.user.pk) | Q(user2=self.request.user.pk))
-        serialzer = DuelSerializer(self.queryset, many=True)
-        return Response(serialzer.data)
+        serializer = DuelSerializer(self.queryset, many=True)
+        return Response(serializer.data)
 
 
 class DuelDetailView(RetrieveAPIView):
