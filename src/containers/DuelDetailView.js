@@ -7,7 +7,7 @@ import {Button, Card} from "antd";
 class DuelDetail extends React.Component {
     state = {
         duel: [],
-        dataset: null
+        dataset: []
     };
 
 
@@ -19,11 +19,12 @@ class DuelDetail extends React.Component {
                 this.setState({
                     duel: res.data
                 });
+                this.fetchDataset(res.data.dataset)
             });
     };
 
-    fetchDataset = () => {
-        axios.get(`http://127.0.0.1:8000/api/dataset/${this.state.duel.dataset}`,
+    fetchDataset = (datasetId) => {
+        axios.get(`http://127.0.0.1:8000/api/dataset/${datasetId}`,
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
             .then(res => {
                 this.setState({
@@ -35,7 +36,6 @@ class DuelDetail extends React.Component {
 
     componentDidMount() {
         this.fetchDuel()
-        this.fetchDataset()
     }
 
     handleDelete = event => {
@@ -57,7 +57,7 @@ class DuelDetail extends React.Component {
         return (
             <div>
                 <Card title={this.state.duel.id}>
-                    {/*<p> {this.state.dataset.id} </p>*/}
+                    <p> {this.state.dataset.data} </p>
                 </Card>
 
                 <form onSubmit={this.handleDelete}>
