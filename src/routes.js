@@ -1,6 +1,7 @@
 import React from "react";
 import {Route} from "react-router-dom";
 
+import DuelDetail from "./containers/DuelDetailView"
 import ArticleList from "./containers/ArticleListView";
 import ArticleDetail from "./containers/ArticleDetailView";
 import Login from "./containers/Login";
@@ -14,6 +15,7 @@ const BaseRouter = () => (
         <Route exact path="/login/" component={Login}/>{" "}
         <Route exact path="/signup/" component={Signup}/>{" "}
         <Route exact path="/duel/" component={DuelList}/>{" "}
+        <Route exact path="/duel/:duelID/" component={DuelDetail}/>{" "}
     </div>
 );
 

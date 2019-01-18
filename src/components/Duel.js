@@ -43,7 +43,7 @@ const Duels = props => {
                 >
                     <List.Item.Meta
                         avatar={<Avatar src={item.avatar}/>}
-                        title={<a href={`/duel/${item.id}`}> {item.user1} vs {item.user2} </a>}
+                        title={<a href={`/duel/${item.id}`}> {item.user1.username} vs {item.user2.username} </a>}
                         description={item.description}
                     />
                     {item.content}

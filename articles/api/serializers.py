@@ -26,6 +26,14 @@ class DuelSerializer(serializers.ModelSerializer):
         fields = ('__all__')
         read_only_fields = ('user2',)
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        if self.context.get('pass_username'):
+            ret['user1'] = {'id': ret['user1'], 'username': User.objects.get(pk=ret['user1']).username}
+            ret['user2'] = {'id': ret['user2'], 'username': User.objects.get(pk=ret['user2']).username}
+        return ret
+
+
 class DatasetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dataset
