@@ -79,21 +79,19 @@ class DatasetCreateView(CreateAPIView):
 class DuelCreateView(CreateAPIView):
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
-    # permission_classes = (permissions.IsAuthenticated,)
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
         serializer.save(user2=self.request.user)
-
-    # def post(self, request, *args, **kwargs):
-    #     print(request.data)
-    #     super(DuelCreateView)
 
 
 class DuelUpdateView(CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user2=self.request.user)
 
 
 class DuelUserListView(ListAPIView):
