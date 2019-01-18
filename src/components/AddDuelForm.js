@@ -19,12 +19,11 @@ class AddDuelForm extends React.Component {
 
 
     handleFormSubmit = async (event, requestType, duelID) => {
-        console.log(this.state)
         event.preventDefault();
 
         const postObj = {
-            user1: event.target.elements.user1.value,
-            dataset: event.target.elements.dataset.value
+            user1: this.state.user1,
+            dataset: this.state.dataset
         };
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
