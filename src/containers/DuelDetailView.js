@@ -2,45 +2,40 @@ import React from "react";
 import axios from "axios";
 import {connect} from "react-redux";
 import {Button, Card} from "antd";
-import AddDuelForm from "../components/AddDuelForm";
 
 
 class DuelDetail extends React.Component {
     state = {
         duel: [],
-        users: [],
-        datasets: []
+        dataset: null
     };
 
-    fetchUsers = () => {
-        axios.get("http://127.0.0.1:8000/api/user/",
+
+    fetchDuel = () => {
+        const duelID = this.props.match.params.duelID;
+        axios.get(`http://127.0.0.1:8000/api/duel/${duelID}`,
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
             .then(res => {
                 this.setState({
-                    users: res.data
+                    duel: res.data
                 });
             });
     };
 
-    fetchDatasets = () => {
-        axios.get("http://127.0.0.1:8000/api/dataset/",
+    fetchDataset = () => {
+        axios.get(`http://127.0.0.1:8000/api/dataset/${this.state.duel.dataset}`,
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
             .then(res => {
                 this.setState({
-                    datasets: res.data
+                    dataset: res.data
                 });
             });
     };
+
 
     componentDidMount() {
-        const duelID = this.props.match.params.duelID;
-        axios.get(`http://127.0.0.1:8000/api/duel/${duelID}`).then(res => {
-            this.setState({
-                duel: res.data
-            });
-        });
-        this.fetchDatasets()
-        this.fetchUsers()
+        this.fetchDuel()
+        this.fetchDataset()
     }
 
     handleDelete = event => {
@@ -62,17 +57,9 @@ class DuelDetail extends React.Component {
         return (
             <div>
                 <Card title={this.state.duel.id}>
-                    <p> siema </p>
+                    {/*<p> {this.state.dataset.id} </p>*/}
                 </Card>
-                <AddDuelForm
-                    {...this.props}
-                    token={this.props.token}
-                    requestType="put"
-                    articleID={this.props.match.params.duelID}
-                    btnText="Update"
-                    users={this.state.users}
-                    datasets={this.state.datasets}
-                />
+
                 <form onSubmit={this.handleDelete}>
                     <Button type="danger" htmlType="submit">
                         Delete
