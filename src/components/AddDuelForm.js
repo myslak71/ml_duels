@@ -23,8 +23,9 @@ class AddDuelForm extends React.Component {
 
         const postObj = {
             user1: this.state.user1,
-            dataset: this.state.dataset
+            dataset: this.state.dataset,
         };
+        console.log(postObj)
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
         axios.defaults.headers = {
@@ -71,12 +72,12 @@ class AddDuelForm extends React.Component {
                 >
                     <FormItem label="User"><Select name="user1" onChange={this.handleUserChange}>
                         {this.props.users.map(user => <Select.Option
-                            value={user.username}>{user.username}</Select.Option>)}
+                            value={user.id}>{user.username}</Select.Option>)}
                     </Select></FormItem>
 
-                    <FormItem label="Dataset"><Select name="dataset">
+                    <FormItem label="Dataset"><Select name="dataset" onChange={this.handleUserDataset}>
                         {this.props.datasets.map(dataset => <Select.Option
-                            value={dataset.username}>{dataset.name}</Select.Option>)}
+                            value={dataset.id}>{dataset.name}</Select.Option>)}
                     </Select></FormItem>
 
                     <FormItem>

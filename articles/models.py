@@ -23,7 +23,7 @@ class Article(models.Model):
 class Duel(models.Model):
     user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user1')
     user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user2')
-    round = models.SmallIntegerField(choices=ROUNDS, default=1)
+    round = models.SmallIntegerField(choices=ROUNDS, default=1, null=True)
     dataset = models.ForeignKey('Dataset', on_delete=models.CASCADE)
     user1_percentage = ArrayField(
         models.DecimalField(decimal_places=4, max_digits=6, validators=[MinValueValidator(0), MaxValueValidator]),

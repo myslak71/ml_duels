@@ -24,7 +24,7 @@ class DuelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Duel
         fields = ('__all__')
-
+        read_only_fields = ('user2',)
 
 class DatasetSerializer(serializers.ModelSerializer):
     class Meta:
