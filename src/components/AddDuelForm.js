@@ -1,5 +1,5 @@
 import React from "react";
-import {Form, Input, Button, Select} from "antd";
+import {Form, Button, Select} from "antd";
 import {connect} from "react-redux";
 import axios from "axios";
 
@@ -7,15 +7,24 @@ const FormItem = Form.Item;
 
 
 class AddDuelForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            user1: null,
+            dataset: null
+        };
+        this.handleUserChange = this.handleUserChange.bind(this)
+        this.handleUserDataset = this.handleUserDataset.bind(this)
+    }
+
 
     handleFormSubmit = async (event, requestType, duelID) => {
         event.preventDefault();
 
         const postObj = {
-            title: event.target.elements.title.value,
-            content: event.target.elements.content.value
+            user1: this.state.user1,
+            dataset: this.state.dataset
         };
-
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
         axios.defaults.headers = {
@@ -40,9 +49,15 @@ class AddDuelForm extends React.Component {
         }
     };
 
+    handleUserChange(value) {
+        this.setState({user1: value})
+    }
+
+    handleUserDataset(value) {
+        this.setState({dataset: value})
+    }
+
     render() {
-        console.log('jo', this.props.users)
-        console.log('data', this.props.datasets)
         return (
             <div>
                 <Form
@@ -54,19 +69,16 @@ class AddDuelForm extends React.Component {
                         )
                     }
                 >
-                    <FormItem label="User"><Select>
+                    <FormItem label="User"><Select name="user1" onChange={this.handleUserChange}>
                         {this.props.users.map(user => <Select.Option
                             value={user.username}>{user.username}</Select.Option>)}
                     </Select></FormItem>
 
-                    <FormItem label="Dataset"><Select>
-                        {this.props.datasets.map(user => <Select.Option
-                            value={user.username}>{user.name}</Select.Option>)}
+                    <FormItem label="Dataset"><Select name="dataset">
+                        {this.props.datasets.map(dataset => <Select.Option
+                            value={dataset.username}>{dataset.name}</Select.Option>)}
                     </Select></FormItem>
 
-                    <FormItem label="Content">
-                        <Input name="content" placeholder="Enter some content ..."/>
-                    </FormItem>
                     <FormItem>
                         <Button type="primary" htmlType="submit">
                             {this.props.btnText}
