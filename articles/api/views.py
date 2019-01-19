@@ -10,8 +10,8 @@ from rest_framework.generics import (
 )
 from rest_framework.response import Response
 
-from articles.models import Article, Duel, Dataset
-from .serializers import ArticleSerializer, DuelSerializer, UserSerializer, DatasetSerializer
+from articles.models import Article, Duel, Dataset, Algorithm
+from .serializers import ArticleSerializer, DuelSerializer, UserSerializer, DatasetSerializer, AlgorithmSerializer
 
 
 class ArticleListView(ListAPIView):
@@ -114,4 +114,10 @@ class DuelUserListView(ListAPIView):
 class DuelDetailView(RetrieveAPIView):
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+
+class AlgorithmCreateView(CreateAPIView):
+    queryset = Algorithm.objects.all()
+    serializer_class = AlgorithmSerializer
     permission_classes = (permissions.IsAuthenticated,)

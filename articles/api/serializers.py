@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from articles.models import Article, Duel, Dataset
+from articles.models import Article, Duel, Dataset, Algorithm
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -45,3 +45,9 @@ class DatasetSerializer(serializers.ModelSerializer):
             json_data = [json.dumps(d) for d in csv.DictReader(open(f'{settings.MEDIA_ROOT}/{instance.dataset}'))]
             ret['data'] = json_data
         return ret
+
+
+class AlgorithmSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Algorithm
+        fields = ('__all__')
