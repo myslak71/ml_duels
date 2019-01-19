@@ -15,6 +15,7 @@ class DuelList extends React.Component {
         axios.get("http://127.0.0.1:8000/api/duel/user/",
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
             .then(res => {
+                console.log(res.data)
                 this.setState({
                     duels: res.data
                 });

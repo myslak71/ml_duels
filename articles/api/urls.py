@@ -14,7 +14,7 @@ from .views import (
     ArticleUpdateView,
     ArticleDeleteView,
     DuelCreateView, UserListView, DatasetListView, DatasetDetailView, DuelUserListView, DuelDetailView,
-    DatasetCreateView, DuelUpdateView, AlgorithmCreateView)
+    DatasetCreateView, DuelUpdateView, AlgorithmCreateView, AlgorithmListView)
 
 urlpatterns = [
     path('', ArticleListView.as_view()),
@@ -33,7 +33,7 @@ urlpatterns = [
     path('dataset/create/', DatasetCreateView().as_view()),
 
     path('algorithm/create/', AlgorithmCreateView().as_view()),
-
+    path('algorithm/', AlgorithmListView.as_view()),
 
 
     path('user/', UserListView.as_view()),

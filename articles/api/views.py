@@ -121,3 +121,21 @@ class AlgorithmCreateView(CreateAPIView):
     queryset = Algorithm.objects.all()
     serializer_class = AlgorithmSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+
+alg = [
+    {'name': 'KNeighborsClassifier', 'parameters': ('n',)},
+    {'name': 'LogisticRegression', 'parameters': ('c',)}
+]
+
+
+class AlgorithmListView(ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Algorithm.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        # algorithm_names_tuple = list(map(lambda x: dict(x[1]), Algorithm._meta.get_field('name').choices))
+
+        # UserListView.queryset = User.objects.all().exclude(pk=request.user.pk)
+        # serializer = UserSerializer(UserListView.queryset, many=True)
+        return Response(alg)
