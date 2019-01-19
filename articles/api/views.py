@@ -124,7 +124,7 @@ class AlgorithmCreateView(CreateAPIView):
 
 
 alg = [
-    {'name': 'KNeighborsClassifier', 'parameters': ('n',)},
+    {'name': 'KNeighborsClassifier', 'parameters': ('n','k')},
     {'name': 'LogisticRegression', 'parameters': ('c',)}
 ]
 

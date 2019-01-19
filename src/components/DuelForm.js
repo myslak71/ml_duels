@@ -52,20 +52,30 @@ class DuelForm extends React.Component {
     };
 
     handleAlgorithmChange(value) {
-        let parameters;
+        let param = [];
         this.props.algorithms.filter((algorithm) => {
             if (algorithm.name === value) {
-                parameters = algorithm.parameters
+                param = algorithm.parameters
             }
         })
-        console.log(parameters)
-        this.setState({algorithm: value, parameters: parameters})
+        this.setState({algorithm: value, parameters: param})
+    }
+
+    renderParameters() {
+        if(this.state.parameters){
+            return (
+                this.state.parameters.map(parameter =>{
+                    return <div>{parameter}</div>
+                })
+            )
+        }
     }
 
     render() {
-        const test = this.state.algorithm
+        const parameters = this.state.parameters;
         return (
             <div>
+                {this.renderParameters()}
                 <Form
                     onSubmit={event =>
                         this.handleFormSubmit(
@@ -75,12 +85,13 @@ class DuelForm extends React.Component {
                         )
                     }
                 >
-
-                    <FormItem label="Algorithm"><Select name="user1" onChange={this.handleAlgorithmChange}>
-                        {this.props.algorithms.map(algorithm => <Select.Option
+                    <FormItem label="Algorithm"><Select name="user1" defaultValue="KNeighborsClassifier"
+                                                        onChange={this.handleAlgorithmChange}>
+                        {this.props.algorithms.map(algorithm =>
+                            <Select.Option
                             value={algorithm.name} parameters={algorithm.parameters}>{algorithm.name}</Select.Option>)}
                     </Select></FormItem>
-                    {test}
+                    {parameters}
                     <FormItem>
                         <Button type="primary" htmlType="submit">
                             Update duel
