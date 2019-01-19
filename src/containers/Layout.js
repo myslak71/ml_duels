@@ -33,12 +33,6 @@ class CustomLayout extends React.Component {
                         }
 
 
-
-
-                        <Menu.Item key="1">
-                            <Link to="/">Posts</Link>
-                        </Menu.Item>
-
                         <Menu.Item key="3">
                             <Link to="/duel/">Duels</Link>
                         </Menu.Item>

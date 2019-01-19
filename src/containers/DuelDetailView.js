@@ -2,12 +2,15 @@ import React from "react";
 import axios from "axios";
 import {connect} from "react-redux";
 import {Button, Card} from "antd";
+import CustomForm from "./ArticleListView";
+import DuelForm from "../components/DuelForm";
 
 
 class DuelDetail extends React.Component {
     state = {
         duel: [],
-        dataset: []
+        dataset: [],
+        algorithms: []
     };
 
 
@@ -33,9 +36,21 @@ class DuelDetail extends React.Component {
             });
     };
 
+    fetchAlgorithms = () => {
+        axios.get(`http://127.0.0.1:8000/api/algorithm/`,
+            {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
+            .then(res => {
+                // console.log('1', res.data)
+                this.setState({
+                    algorithms: res.data
+                });
+            });
+    };
+
 
     componentDidMount() {
         this.fetchDuel()
+        this.fetchAlgorithms()
     }
 
     handleDelete = event => {
@@ -57,8 +72,10 @@ class DuelDetail extends React.Component {
         return (
             <div>
                 <Card title={this.state.duel.id}>
-                    <p> {this.state.dataset.data} </p>
+                    {/*<p> {this.state.dataset.data} </p>*/}
                 </Card>
+
+                <DuelForm requestType="post" algorithms={this.state.algorithms} btnText="Create" />
 
                 <form onSubmit={this.handleDelete}>
                     <Button type="danger" htmlType="submit">
