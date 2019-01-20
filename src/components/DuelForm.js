@@ -52,27 +52,29 @@ class DuelForm extends React.Component {
     };
 
     handleAlgorithmChange(value) {
-        let param = [];
+        let parameters = [];
         this.props.algorithms.filter((algorithm) => {
             if (algorithm.name === value) {
-                param = algorithm.parameters
+                parameters = algorithm.parameters
             }
         })
-        this.setState({algorithm: value, parameters: param})
+        this.setState({algorithm: value, parameters: parameters})
     }
 
     renderParameters() {
+        console.log('dosc',this.state.parameters)
         if (this.state.parameters) {
             return (
-                this.state.parameters.map(parameter => {
+                Object.entries(this.state.parameters).map(([parameter, defaultValue])=> {
                     return (
                         <FormItem label={parameter}>
-                        <InputNumber placeholder="siema"
-                            defaultValue={0.000}
-                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                            {/*{parameter} {defaultValue}*/}
+                        <InputNumber
+                            value={defaultValue}
+                            name={parameter}
                             // onChange={onChange}
                         />
+                        siemku {parameter} {defaultValue}
                         </FormItem>
                     );
                 })
