@@ -15,6 +15,7 @@ class DuelForm extends React.Component {
             dataset: null
         };
         this.handleAlgorithmChange = this.handleAlgorithmChange.bind(this)
+        this.handleParameterChange = this.handleParameterChange.bind(this)
     }
 
 
@@ -26,7 +27,6 @@ class DuelForm extends React.Component {
             dataset: this.state.dataset,
         };
 
-        console.log(postObj)
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
         axios.defaults.headers = {
@@ -61,26 +61,31 @@ class DuelForm extends React.Component {
         this.setState({algorithm: value, parameters: parameters})
     }
 
+    handleParameterChange(parameter, value) {
+        let stateClone = this.state.parameters
+        stateClone[parameter] = value
+        this.setState(stateClone)
+    }
+
+
     renderParameters() {
-        console.log('dosc',this.state.parameters)
         if (this.state.parameters) {
             return (
-                Object.entries(this.state.parameters).map(([parameter, defaultValue])=> {
+                Object.entries(this.state.parameters).map(([parameter, defaultValue]) => {
                     return (
                         <FormItem label={parameter}>
-                            {/*{parameter} {defaultValue}*/}
-                        <InputNumber
-                            value={defaultValue}
-                            name={parameter}
-                            // onChange={onChange}
-                        />
-                        siemku {parameter} {defaultValue}
+                            <InputNumber
+                                value={defaultValue}
+                                name={parameter}
+                                onChange={(value) => this.handleParameterChange(parameter, value)}
+                            />
                         </FormItem>
                     );
                 })
             )
         }
     }
+
 
     render() {
         const parameters = this.state.parameters;
@@ -95,16 +100,17 @@ class DuelForm extends React.Component {
                         )
                     }
                 >
-                    <FormItem label="Algorithm"><Select name="user1" defaultValue="KNeighborsClassifier"
-                                                        onChange={this.handleAlgorithmChange}>
-                        {this.props.algorithms.map(algorithm =>
-                            <Select.Option
-                                value={algorithm.name}
-                                parameters={algorithm.parameters}>{algorithm.name}</Select.Option>)}
-                    </Select></FormItem>
+                    <FormItem label="Algorithm">
+                        <Select name="user1" defaultValue="KNeighborsClassifier"
+                                onChange={this.handleAlgorithmChange}>
+                            {this.props.algorithms.map(algorithm =>
+                                <Select.Option
+                                    value={algorithm.name}
+                                    parameters={algorithm.parameters}>{algorithm.name}</Select.Option>)}
+                        </Select></FormItem>
                     <Form layout="inline">
-                {this.renderParameters()}
-                </Form>
+                        {this.renderParameters()}
+                    </Form>
                     <FormItem>
                         <Button type="primary" htmlType="submit">
                             Update duel
