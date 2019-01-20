@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import {connect} from "react-redux";
 import {Button, Card} from "antd";
-import CustomForm from "./ArticleListView";
 import DuelForm from "../components/DuelForm";
 
 

@@ -1,5 +1,5 @@
 import React from "react";
-import {Form, Button, Select} from "antd";
+import {Form, Button, Select, InputNumber} from "antd";
 import {connect} from "react-redux";
 import axios from "axios";
 
@@ -62,10 +62,19 @@ class DuelForm extends React.Component {
     }
 
     renderParameters() {
-        if(this.state.parameters){
+        if (this.state.parameters) {
             return (
-                this.state.parameters.map(parameter =>{
-                    return <div>{parameter}</div>
+                this.state.parameters.map(parameter => {
+                    return (
+                        <FormItem label={parameter}>
+                        <InputNumber placeholder="siema"
+                            defaultValue={0.000}
+                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                            // onChange={onChange}
+                        />
+                        </FormItem>
+                    );
                 })
             )
         }
@@ -75,7 +84,6 @@ class DuelForm extends React.Component {
         const parameters = this.state.parameters;
         return (
             <div>
-                {this.renderParameters()}
                 <Form
                     onSubmit={event =>
                         this.handleFormSubmit(
@@ -89,9 +97,12 @@ class DuelForm extends React.Component {
                                                         onChange={this.handleAlgorithmChange}>
                         {this.props.algorithms.map(algorithm =>
                             <Select.Option
-                            value={algorithm.name} parameters={algorithm.parameters}>{algorithm.name}</Select.Option>)}
+                                value={algorithm.name}
+                                parameters={algorithm.parameters}>{algorithm.name}</Select.Option>)}
                     </Select></FormItem>
-                    {parameters}
+                    <Form layout="inline">
+                {this.renderParameters()}
+                </Form>
                     <FormItem>
                         <Button type="primary" htmlType="submit">
                             Update duel
