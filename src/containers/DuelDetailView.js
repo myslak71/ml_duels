@@ -39,7 +39,6 @@ class DuelDetail extends React.Component {
         axios.get(`http://127.0.0.1:8000/api/algorithm/`,
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
             .then(res => {
-                console.log('1', res.data)
                 this.setState({
                     algorithms: res.data
                 });

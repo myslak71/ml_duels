@@ -31,6 +31,11 @@ class DuelForm extends React.Component {
             name: this.state.algorithm,
             parameters: this.state.parameters,
         }
+
+        const duel = {
+            dataset: this.props.duel.dataset,
+            user1: this.props.duel.user1
+        }
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
         axios.defaults.headers = {
@@ -46,7 +51,7 @@ class DuelForm extends React.Component {
                 }
             })
 
-        await axios.post(`http://127.0.0.1:8000/api/duel/${duelID}/update/`, algorithm)
+        await axios.put(`http://127.0.0.1:8000/api/duel/${duelID}/update/`, duel)
             .then(res => {
                 if (res.status === 201) {
                     const algorithmId=res.data.id
@@ -74,6 +79,7 @@ class DuelForm extends React.Component {
 
 
     renderParameters() {
+        console.log(this.props.duel)
         if (this.state.parameters) {
             return (
                 Object.entries(this.state.parameters).map(([parameter, defaultValue]) => {
@@ -106,12 +112,13 @@ class DuelForm extends React.Component {
                     }
                 >
                     <FormItem label="Algorithm">
-                        <Select name="user1" defaultValue="KNeighborsClassifier"
+                        <Select name="user1" defaultValue="Wybierz"
                                 onChange={this.handleAlgorithmChange}>
                             {this.props.algorithms.map(algorithm =>
                                 <Select.Option
-                                    value={algorithm.id}
-                                    parameters={algorithm.parameters}>{algorithm.name}</Select.Option>)}
+                                    value={algorithm.name}
+                                    // parameters={algorithm.parameters}
+                                >{algorithm.name_display}</Select.Option>)}
                         </Select></FormItem>
                     <Form layout="inline">
                         {this.renderParameters()}

@@ -86,7 +86,7 @@ class DuelCreateView(CreateAPIView):
         serializer.save(user2=self.request.user)
 
 
-class DuelUpdateView(CreateAPIView):
+class DuelUpdateView(UpdateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
@@ -132,17 +132,10 @@ alg = [
 
 class AlgorithmListView(ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
-    queryset = Algorithm.objects.all().filter(pk__gte=1, pk__lte=7)
+    queryset = Algorithm.objects.all().filter(pk__gte=1, pk__lte=8)
     serializer_class = AlgorithmSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['include_algorithm_name'] = True
         return context
-    # def get(self, request, *args, **kwargs):
-    #
-    #     algorithm_names_tuple = list(map(lambda x: dict(x[1]), Algorithm._meta.get_field('name').choices))
-        #
-        # UserListView.queryset = User.objects.all().exclude(pk=request.user.pk)
-        # serializer = UserSerializer(UserListView.queryset, many=True)
-        # return Response(alg)
