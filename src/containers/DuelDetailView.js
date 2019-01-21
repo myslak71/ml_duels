@@ -14,11 +14,11 @@ class DuelDetail extends React.Component {
 
     fetchData = () => {
         const duelID = this.props.match.params.duelID;
-        let ret=[]
+        let ret = []
         axios.get(`http://127.0.0.1:8000/api/duel/${duelID}`,
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
             .then(res => {
-                ret= [res.data, this.fetchDataset(res.data.dataset)]
+                ret = [res.data, this.fetchDataset(res.data.dataset)]
                 console.log('qasd', ret)
             });
     }
@@ -26,48 +26,29 @@ class DuelDetail extends React.Component {
 
     fetchDuel = () => {
         const duelID = this.props.match.params.duelID;
-        let ret=[]
         axios.get(`http://127.0.0.1:8000/api/duel/${duelID}`,
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
             .then(res => {
-                // this.setState({
-                //     duel: res.data
-                // });
-                ret= [res.data, this.fetchDataset(res.data.dataset)]
-                console.log('qasd', ret)
-            });
+                console.log([res, this.fetchDataset(res.data.dataset)])
+                    return [res, this.fetchDataset(res.data.dataset)]
+                }
+            )
+
     };
 
     fetchDataset = (datasetId) => {
-        let dataset = null
-        axios.get(`http://127.0.0.1:8000/api/dataset/${datasetId}`,
+         axios.get(`http://127.0.0.1:8000/api/dataset/${datasetId}`,
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
-            .then(res => {
-                // this.setState({
-                //     dataset: res.data
-                // });
-                dataset = res.data
-                console.log('ta', dataset)
-            });
-                        console.log('ta2', dataset)
-
-        return dataset
     };
 
     fetchAlgorithms = () => {
-        axios.get(`http://127.0.0.1:8000/api/algorithm/`,
+        return axios.get(`http://127.0.0.1:8000/api/algorithm/`,
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
-            .then(res => {
-                this.setState({
-                    algorithms: res.data
-                });
-            });
     };
 
 
     componentDidMount() {
-        console.log('siemas')
-        console.log(this.fetchDuel())
+        this.fetchDuel()
         this.fetchAlgorithms()
     }
 
