@@ -25,8 +25,7 @@ class DuelList extends React.Component {
         return axios.get("http://127.0.0.1:8000/api/dataset/",
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
     };
-
-
+    
     componentDidMount() {
         const promises = [this.fetchDuels(), this.fetchUsers(), this.fetchDatasets()]
         Promise.all(promises).then(([duelsResponse, usersResponse, datasetsResponse]) => {
