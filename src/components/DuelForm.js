@@ -19,14 +19,18 @@ class DuelForm extends React.Component {
     }
 
 
-    handleFormSubmit = async (event, requestType, duelID) => {
+    handleFormSubmit = async (event, requestType) => {
         event.preventDefault();
-
+        const duelID = this.props.duelID
         const postObj = {
             user1: this.state.user1,
             dataset: this.state.dataset,
         };
 
+        const algorithm = {
+            name: this.state.algorithm,
+            parameters: this.state.parameters,
+        }
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
         axios.defaults.headers = {
@@ -34,27 +38,28 @@ class DuelForm extends React.Component {
             Authorization: `Token ${this.props.token}`,
         };
 
-        if (requestType === "post") {
-            await axios.post("http://127.0.0.1:8000/api/duel/create/", postObj)
-                .then(res => {
-                    if (res.status === 201) {
-                        this.props.history.push(`/`);
-                    }
-                })
-        } else if (requestType === "put") {
-            await axios.put(`http://127.0.0.1:8000/api/duel/${duelID}/update/`, postObj)
-                .then(res => {
-                    if (res.status === 200) {
-                        this.props.history.push(`/`);
-                    }
-                })
-        }
+
+        await axios.post("http://127.0.0.1:8000/api/algorithm/create/", algorithm)
+            .then(res => {
+                if (res.status === 201) {
+                    const algorithmId=res.data.id
+                }
+            })
+
+        await axios.post(`http://127.0.0.1:8000/api/duel/${duelID}/update/`, algorithm)
+            .then(res => {
+                if (res.status === 201) {
+                    const algorithmId=res.data.id
+                }
+            })
+
+
     };
 
     handleAlgorithmChange(value) {
         let parameters = [];
         this.props.algorithms.filter((algorithm) => {
-            if (algorithm.name === value) {
+            if (algorithm.id === value) {
                 parameters = algorithm.parameters
             }
         })
@@ -105,7 +110,7 @@ class DuelForm extends React.Component {
                                 onChange={this.handleAlgorithmChange}>
                             {this.props.algorithms.map(algorithm =>
                                 <Select.Option
-                                    value={algorithm.name}
+                                    value={algorithm.id}
                                     parameters={algorithm.parameters}>{algorithm.name}</Select.Option>)}
                         </Select></FormItem>
                     <Form layout="inline">

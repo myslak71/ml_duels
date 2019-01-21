@@ -82,6 +82,7 @@ class DuelCreateView(CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
+        print(self.request.data)
         serializer.save(user2=self.request.user)
 
 
@@ -124,18 +125,24 @@ class AlgorithmCreateView(CreateAPIView):
 
 
 alg = [
-    {'name': 'KNeighborsClassifier', 'parameters': {'n': 1, 'k': 33}},
-    {'name': 'LogisticRegression', 'parameters': {'c': 77, 'z': 545}}
+    {'id': 0, 'name': 'KNeighborsClassifier', 'parameters': {'n': 1, 'k': 33}},
+    {'id': 1, 'name': 'LogisticRegression', 'parameters': {'c': 77, 'z': 545}}
 ]
 
 
 class AlgorithmListView(ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
-    queryset = Algorithm.objects.all()
+    queryset = Algorithm.objects.all().filter(pk__gte=1, pk__lte=7)
+    serializer_class = AlgorithmSerializer
 
-    def get(self, request, *args, **kwargs):
-        # algorithm_names_tuple = list(map(lambda x: dict(x[1]), Algorithm._meta.get_field('name').choices))
-
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['include_algorithm_name'] = True
+        return context
+    # def get(self, request, *args, **kwargs):
+    #
+    #     algorithm_names_tuple = list(map(lambda x: dict(x[1]), Algorithm._meta.get_field('name').choices))
+        #
         # UserListView.queryset = User.objects.all().exclude(pk=request.user.pk)
         # serializer = UserSerializer(UserListView.queryset, many=True)
-        return Response(alg)
+        # return Response(alg)

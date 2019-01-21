@@ -74,7 +74,8 @@ class DuelDetail extends React.Component {
                     {/*<p> {this.state.dataset.data} </p>*/}
                 </Card>
 
-                <DuelForm requestType="post" algorithms={this.state.algorithms} btnText="Create" />
+                <DuelForm requestType="post" algorithms={this.state.algorithms} duel={this.state.duel} duelID={this.props.match.params.duelID}
+                          btnText="Create"/>
 
                 <form onSubmit={this.handleDelete}>
                     <Button type="danger" htmlType="submit">

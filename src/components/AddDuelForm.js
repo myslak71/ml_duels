@@ -24,6 +24,7 @@ class AddDuelForm extends React.Component {
         const postObj = {
             user1: this.state.user1,
             dataset: this.state.dataset,
+            rounds: []
         };
         console.log(postObj)
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
