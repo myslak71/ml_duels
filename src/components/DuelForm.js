@@ -19,14 +19,23 @@ class DuelForm extends React.Component {
     }
 
 
-    handleFormSubmit = async (event, requestType, duelID) => {
+    handleFormSubmit = async (event, requestType) => {
         event.preventDefault();
-
+        const duelID = this.props.duelID
         const postObj = {
             user1: this.state.user1,
             dataset: this.state.dataset,
         };
 
+        const algorithm = {
+            name: this.state.algorithm,
+            parameters: this.state.parameters,
+        }
+
+        const duel = {
+            dataset: this.props.duel.dataset,
+            user1: this.props.duel.user1
+        }
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
         axios.defaults.headers = {
@@ -34,27 +43,28 @@ class DuelForm extends React.Component {
             Authorization: `Token ${this.props.token}`,
         };
 
-        if (requestType === "post") {
-            await axios.post("http://127.0.0.1:8000/api/duel/create/", postObj)
-                .then(res => {
-                    if (res.status === 201) {
-                        this.props.history.push(`/`);
-                    }
-                })
-        } else if (requestType === "put") {
-            await axios.put(`http://127.0.0.1:8000/api/duel/${duelID}/update/`, postObj)
-                .then(res => {
-                    if (res.status === 200) {
-                        this.props.history.push(`/`);
-                    }
-                })
-        }
+
+        await axios.post("http://127.0.0.1:8000/api/algorithm/create/", algorithm)
+            .then(res => {
+                if (res.status === 201) {
+                    const algorithmId=res.data.id
+                }
+            })
+
+        await axios.put(`http://127.0.0.1:8000/api/duel/${duelID}/update/`, duel)
+            .then(res => {
+                if (res.status === 201) {
+                    const algorithmId=res.data.id
+                }
+            })
+
+
     };
 
     handleAlgorithmChange(value) {
         let parameters = [];
         this.props.algorithms.filter((algorithm) => {
-            if (algorithm.name === value) {
+            if (algorithm.id === value) {
                 parameters = algorithm.parameters
             }
         })
@@ -69,6 +79,7 @@ class DuelForm extends React.Component {
 
 
     renderParameters() {
+        console.log(this.props.duel)
         if (this.state.parameters) {
             return (
                 Object.entries(this.state.parameters).map(([parameter, defaultValue]) => {
@@ -101,12 +112,13 @@ class DuelForm extends React.Component {
                     }
                 >
                     <FormItem label="Algorithm">
-                        <Select name="user1" defaultValue="KNeighborsClassifier"
+                        <Select name="user1" defaultValue="Wybierz"
                                 onChange={this.handleAlgorithmChange}>
                             {this.props.algorithms.map(algorithm =>
                                 <Select.Option
                                     value={algorithm.name}
-                                    parameters={algorithm.parameters}>{algorithm.name}</Select.Option>)}
+                                    // parameters={algorithm.parameters}
+                                >{algorithm.name_display}</Select.Option>)}
                         </Select></FormItem>
                     <Form layout="inline">
                         {this.renderParameters()}

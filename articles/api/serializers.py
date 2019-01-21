@@ -24,7 +24,7 @@ class DuelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Duel
         fields = ('__all__')
-        read_only_fields = ('user2',)
+        read_only_fields = ('user2', 'rounds')
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -51,3 +51,10 @@ class AlgorithmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Algorithm
         fields = ('__all__')
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        if self.context.get('include_algorithm_name'):
+            choice = dict(Algorithm._meta.get_field('name').choices)[ret['name']]
+            ret['name_display'] = choice
+        return ret
