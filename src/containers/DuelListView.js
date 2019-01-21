@@ -12,49 +12,28 @@ class DuelList extends React.Component {
     };
 
     fetchDuels = () => {
-        axios.get("http://127.0.0.1:8000/api/duel/user/",
+        return axios.get("http://127.0.0.1:8000/api/duel/user/",
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
-            .then(res => {
-                console.log(res.data)
-                this.setState({
-                    duels: res.data
-                });
-            });
     };
 
     fetchUsers = () => {
-        axios.get("http://127.0.0.1:8000/api/user/",
+        return axios.get("http://127.0.0.1:8000/api/user/",
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
-            .then(res => {
-                this.setState({
-                    users: res.data
-                });
-            });
     };
 
     fetchDatasets = () => {
-        axios.get("http://127.0.0.1:8000/api/dataset/",
+        return axios.get("http://127.0.0.1:8000/api/dataset/",
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
-            .then(res => {
-                this.setState({
-                    datasets: res.data
-                });
-            });
     };
 
+
     componentDidMount() {
-        this.fetchDuels();
-        this.fetchUsers();
-        this.fetchDatasets();
+        const promises = [this.fetchDuels(), this.fetchUsers(), this.fetchDatasets()]
+        Promise.all(promises).then(([duelsResponse, usersResponse, datasetsResponse]) => {
+            this.setState({duels: duelsResponse.data, users: usersResponse.data, datasets: datasetsResponse.data});
+        });
     }
 
-    componentWillReceiveProps(newProps) {
-        if (newProps.token) {
-            this.fetchDuels();
-            this.fetchUsers();
-            this.fetchDatasets();
-        }
-    }
 
     render() {
         return (

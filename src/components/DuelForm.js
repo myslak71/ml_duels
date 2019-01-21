@@ -34,7 +34,7 @@ class DuelForm extends React.Component {
 
         const duel = {
             dataset: this.props.duel.dataset,
-            user1: this.props.duel.user1
+            user1: this.props.duel.user1.id
         }
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
@@ -79,7 +79,6 @@ class DuelForm extends React.Component {
 
 
     renderParameters() {
-        console.log(this.props.duel)
         if (this.state.parameters) {
             return (
                 Object.entries(this.state.parameters).map(([parameter, defaultValue]) => {
