@@ -64,7 +64,7 @@ class DuelForm extends React.Component {
     handleAlgorithmChange(value) {
         let parameters = [];
         this.props.algorithms.filter((algorithm) => {
-            if (algorithm.id === value) {
+            if (algorithm.name === value) {
                 parameters = algorithm.parameters
             }
         })
@@ -80,6 +80,7 @@ class DuelForm extends React.Component {
 
     renderParameters() {
         if (this.state.parameters) {
+            console.log(this.state.parameters)
             return (
                 Object.entries(this.state.parameters).map(([parameter, defaultValue]) => {
                     return (
