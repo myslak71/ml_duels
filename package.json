@@ -5,6 +5,10 @@
   "dependencies": {
     "antd": "^3.7.3",
     "axios": "^0.18.0",
+    "d3": "^5.7.0",
+    "d3-latest": "^5.0.4",
+    "d3-svg-legend": "^2.25.6",
+    "prop-types": "latest",
     "react": "^16.4.1",
     "react-d3-scatterplot-matrix": "^1.0.0",
     "react-dom": "^16.4.1",
