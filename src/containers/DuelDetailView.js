@@ -12,33 +12,16 @@ class DuelDetail extends React.Component {
         algorithms: []
     };
 
-    fetchData = () => {
-        const duelID = this.props.match.params.duelID;
-        let ret = []
-        axios.get(`http://127.0.0.1:8000/api/duel/${duelID}`,
-            {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
-            .then(res => {
-                ret = [res.data, this.fetchDataset(res.data.dataset)]
-                console.log('qasd', ret)
-            });
-    }
-
-
     fetchDuel = () => {
         const duelID = this.props.match.params.duelID;
-        axios.get(`http://127.0.0.1:8000/api/duel/${duelID}`,
+        return axios.get(`http://127.0.0.1:8000/api/duel/${duelID}`,
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
-            .then(res => {
-                console.log([res, this.fetchDataset(res.data.dataset)])
-                    return [res, this.fetchDataset(res.data.dataset)]
-                }
-            )
-
     };
 
-    fetchDataset = (datasetId) => {
-         axios.get(`http://127.0.0.1:8000/api/dataset/${datasetId}`,
+    fetchDataset = async (datasetId) => {
+        return await axios.get(`http://127.0.0.1:8000/api/dataset/${datasetId}`,
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
+
     };
 
     fetchAlgorithms = () => {
@@ -47,9 +30,16 @@ class DuelDetail extends React.Component {
     };
 
 
-    componentDidMount() {
-        this.fetchDuel()
-        this.fetchAlgorithms()
+    async componentDidMount() {
+        let algorithms = await this.fetchAlgorithms()
+        let duel = await this.fetchDuel()
+        let dataset = await this.fetchDataset(duel.data.dataset)
+        this.setState({
+            duel: duel.data,
+            dataset: dataset.data,
+            algorithms: algorithms.data
+        });
+        console.log(algorithms.data, duel.data, dataset.data)
     }
 
     handleDelete = event => {
@@ -68,7 +58,7 @@ class DuelDetail extends React.Component {
     };
 
     render() {
-        console.log(this.state)
+        console.log('stat', this.state)
         return (
             <div>
                 <Card title={this.state.duel.id}>
