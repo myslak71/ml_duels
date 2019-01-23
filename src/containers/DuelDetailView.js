@@ -3,8 +3,8 @@ import axios from "axios";
 import {connect} from "react-redux";
 import {Button, Tabs} from "antd";
 import DuelForm from "../components/DuelForm";
-import ScatterPlot from "../components/ScatterPlot"
-import Matrix from "react-d3-scatterplot-matrix"
+// import ScatterPlot from "../components/ScatterPlot"
+// import Matrix from "react-d3-scatterplot-matrix"
 
 
 class DuelDetail extends React.Component {
@@ -64,21 +64,12 @@ class DuelDetail extends React.Component {
         } else {
             var title = null
         }
-        var data = [{"R": "74", "G": "85", "B": "123", "result": "skin"},
-            {"R": "74", "G": "76", "B": "30", "result": "non-skin"},
-            {"R": "30", "G": "27", "B": "23", "result": "non-skin"},
-            {"R": "121", "G": "121", "B": "121", "result": "non-skin"},
-            {"R": "181", "G": "178", "B": "133", "result": "non-skin"},
-            {"R": "121", "G": "151", "B": "102", "result": "non-skin"},
-            {"R": "103", "G": "141", "B": "199", "result": "skin"}]
-        var centroids = [{"R": "74", "G": "85", "B": "123", "result": "skin"}]
-        console.log(data)
-        console.log(this.state.dataset.data)
         return (
             <div>
+                {title}
                 <Tabs defaultActiveKey="1">
                     <Tabs.TabPane tab="Scatter plot" key="1">
-                    <ScatterPlot plotId="kMeans" data={data} centroids= {centroids} />
+                    {/*<ScatterPlot plotId="kMeans" data={data} centroids= {centroids} />*/}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="Histogram" key="2">Content2</Tabs.TabPane>
                     <Tabs.TabPane tab="Whisker plot" key="3">Content of Tab Pane 3</Tabs.TabPane>

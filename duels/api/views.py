@@ -10,38 +10,8 @@ from rest_framework.generics import (
 )
 from rest_framework.response import Response
 
-from articles.models import Article, Duel, Dataset, Algorithm
-from .serializers import ArticleSerializer, DuelSerializer, UserSerializer, DatasetSerializer, AlgorithmSerializer
-
-
-class ArticleListView(ListAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
-    permission_classes = (permissions.AllowAny,)
-
-
-class ArticleDetailView(RetrieveAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
-    permission_classes = (permissions.AllowAny,)
-
-
-class ArticleCreateView(CreateAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-
-
-class ArticleUpdateView(UpdateAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-
-
-class ArticleDeleteView(DestroyAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+from duels.models import Duel, Dataset, Algorithm
+from .serializers import DuelSerializer, UserSerializer, DatasetSerializer, AlgorithmSerializer
 
 
 class UserListView(ListAPIView):
@@ -82,7 +52,6 @@ class DuelCreateView(CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
-        print(self.request.data)
         serializer.save(user2=self.request.user)
 
 
@@ -112,6 +81,12 @@ class DuelUserListView(ListAPIView):
         return Response(serializer.data)
 
 
+class DuelDeleteView(DestroyAPIView):
+    queryset = Duel.objects.all()
+    serializer_class = DuelSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+
 class DuelDetailView(RetrieveAPIView):
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
@@ -122,16 +97,11 @@ class DuelDetailView(RetrieveAPIView):
         context['pass_username'] = True
         return context
 
+
 class AlgorithmCreateView(CreateAPIView):
     queryset = Algorithm.objects.all()
     serializer_class = AlgorithmSerializer
     permission_classes = (permissions.IsAuthenticated,)
-
-
-alg = [
-    {'id': 0, 'name': 'KNeighborsClassifier', 'parameters': {'n': 1, 'k': 33}},
-    {'id': 1, 'name': 'LogisticRegression', 'parameters': {'c': 77, 'z': 545}}
-]
 
 
 class AlgorithmListView(ListAPIView):
