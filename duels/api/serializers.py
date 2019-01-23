@@ -42,7 +42,7 @@ class DatasetSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         if self.context.get('data'):
-            json_data = [json.dumps(d) for d in csv.DictReader(open(f'{settings.MEDIA_ROOT}/{instance.dataset}'))]
+            json_data = [d for d in csv.DictReader(open(f'{settings.MEDIA_ROOT}/{instance.dataset}'))]
             ret['data'] = json_data
         return ret
 
