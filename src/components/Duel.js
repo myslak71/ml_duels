@@ -28,23 +28,11 @@ const Duels = props => {
             renderItem={item => (
                 <List.Item
                     key={item.user1}
-                    actions={[
-                        <IconText type="star-o" text="156"/>,
-                        <IconText type="like-o" text="156"/>,
-                        <IconText type="message" text="2"/>
-                    ]}
-                    extra={
-                        <img
-                            width={272}
-                            alt="logo"
-                            src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                        />
-                    }
                 >
                     <List.Item.Meta
                         avatar={<Avatar src={item.avatar}/>}
-                        title={<a href={`/duel/${item.id}`}> {item.user1.username} vs {item.user2.username} </a>}
-                        description={item.description}
+                        title={<a href={`/duel/${item.id}`}>
+                            {item.user1.username} vs {item.user2.username}</a>}
                     />
                     {item.content}
                 </List.Item>
