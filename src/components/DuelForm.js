@@ -10,9 +10,9 @@ class DuelForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            algorithm: null,
-            parameters: null,
-            dataset: null
+            algorithm: [],
+            parameters: [],
+            dataset: []
         };
         this.handleAlgorithmChange = this.handleAlgorithmChange.bind(this)
         this.handleParameterChange = this.handleParameterChange.bind(this)
