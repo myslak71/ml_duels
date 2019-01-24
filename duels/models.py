@@ -11,16 +11,6 @@ ROUNDS = (
     (4, 'Finished')
 )
 
-ALGORITHM_NAME = (
-    (0, 'KNeighborsClassifier'),
-    (1, 'LogisticRegression'),
-    (2, 'LinearSVC'),
-    (3, 'GaussianNB'),
-    (4, 'DecisionTreeClassifier'),
-    (5, 'RandomForestClassifier'),
-    (6, 'GradientBoostingClassifier'),
-    (7, 'MLPClassifier'),
-)
 
 
 class Article(models.Model):
@@ -37,11 +27,11 @@ class Duel(models.Model):
     rounds = models.ManyToManyField('Algorithm')
     dataset = models.ForeignKey('Dataset', on_delete=models.CASCADE)
     user1_percentage = ArrayField(
-        models.DecimalField(decimal_places=4, max_digits=6, validators=[MinValueValidator(0), MaxValueValidator]),
+        models.DecimalField(decimal_places=4, max_digits=6, validators=[MinValueValidator(0), MaxValueValidator(100)]),
         size=3,
         null=True)
     user2_percentage = ArrayField(
-        models.DecimalField(decimal_places=4, max_digits=6, validators=[MinValueValidator(0), MaxValueValidator]),
+        models.DecimalField(decimal_places=4, max_digits=6, validators=[MinValueValidator(0), MaxValueValidator(100)]),
         size=3,
         null=True)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -57,5 +47,21 @@ class Dataset(models.Model):
 
 
 class Algorithm(models.Model):
+    ALGORITHM_NAME = (
+        ('0', 'KNeighborsClassifier'),
+        ('1', 'LogisticRegression'),
+        ('2', 'LinearSVC'),
+        ('3', 'GaussianNB'),
+        ('4', 'DecisionTreeClassifier'),
+        ('5', 'RandomForestClassifier'),
+        ('6', 'GradientBoostingClassifier'),
+        ('7', 'MLPClassifier'),
+    )
+
     name = models.CharField(max_length=64, choices=ALGORITHM_NAME)
     parameters = JSONField()
+
+    def __str__(self):
+        field = self._meta.get_field('name')
+        value = self._get_FIELD_display(field)
+        return f'{value}'
