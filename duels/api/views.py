@@ -1,3 +1,7 @@
+from decimal import Decimal
+
+import pandas as pandas
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Q
 from rest_framework import permissions
@@ -9,6 +13,13 @@ from rest_framework.generics import (
     UpdateAPIView
 )
 from rest_framework.response import Response
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.svm import LinearSVC
+from sklearn.tree import DecisionTreeClassifier
 
 from duels.models import Duel, Dataset, Algorithm
 from .serializers import DuelSerializer, UserSerializer, DatasetSerializer, AlgorithmSerializer
@@ -52,13 +63,41 @@ class DuelCreateView(CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
-        serializer.save(user2=self.request.user)
+        serializer.save(user2=self.request.user, user1_percentage=[], user2_percentage=[])
 
 
+from sklearn.model_selection import train_test_split
 
-def count_percentage(algorithm):
+MEDIA_ROOT = settings.MEDIA_ROOT
 
-    return 'siema'
+
+def count_percentage(duel, algorithm):
+    dataset = pandas.read_csv(f'{MEDIA_ROOT}/{duel.dataset.dataset}')
+
+    array = dataset.values
+    X = array[:, 0:3]
+    Y = array[:, 3]
+    validation_size = 0.20
+    seed = 7
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=validation_size,
+                                                        random_state=seed)
+    scoring = 'accuracy'
+
+    algorithms = {
+        'KNeighborsClassifier': KNeighborsClassifier,
+        'LogisticRegression': LogisticRegression,
+        'LinearSVC': LinearSVC,
+        'GaussianNB': GaussianNB,
+        'DecisionTreeClassifier': DecisionTreeClassifier,
+        'RandomForestClassifier': RandomForestClassifier,
+        'GradientBoostingClassifier': GradientBoostingClassifier,
+        'MLPClassifier': MLPClassifier,
+    }
+
+    print(algorithms[algorithm.get_name_display()]())
+    model = algorithms[algorithm.get_name_display()](**algorithm.parameters)
+    model.fit(X_train, y_train)
+    return Decimal(100 * model.score(X_test, y_test)).quantize(Decimal('.001'))
 
 
 class DuelUpdateView(UpdateAPIView):
@@ -67,10 +106,16 @@ class DuelUpdateView(UpdateAPIView):
     serializer_class = DuelSerializer
 
     def perform_update(self, serializer):
-        instance = serializer.save()
+        duel = serializer.save()
         algorithm = Algorithm.objects.get(pk=self.request.data['algorithm'])
-        print(count_percentage(algorithm))
-        instance.rounds.add(algorithm)
+        duel.rounds.add(algorithm)
+        percentage = count_percentage(duel, algorithm)
+        if duel.user1 == self.request.user:
+            duel.user1_percentage.append(percentage)
+        else:
+            duel.user2_percentage.append(percentage)
+        duel.save()
+
 
 
 class DuelUserListView(ListAPIView):

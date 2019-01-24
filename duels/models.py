@@ -61,7 +61,3 @@ class Algorithm(models.Model):
     name = models.CharField(max_length=64, choices=ALGORITHM_NAME)
     parameters = JSONField()
 
-    def __str__(self):
-        field = self._meta.get_field('name')
-        value = self._get_FIELD_display(field)
-        return f'{value}'
