@@ -75,16 +75,13 @@ def count_percentage(duel, algorithm):
     dataset = pandas.read_csv(f'{MEDIA_ROOT}/{duel.dataset.dataset}')
     if len(duel.user1_percentage) + len(duel.user2_percentage) < 2:
         dataset = dataset[0:len(dataset) / 3]
-    elif len(duel.user1_percentage) + len(duel.user2_percentage) < 4
+    elif len(duel.user1_percentage) + len(duel.user2_percentage) < 4:
         dataset = dataset[0:2 * len(dataset) / 3]
 
-    array = dataset.values
-    x = array[:, 0:3]
-    y = array[:, 3]
-    validation_size = 0.20
-    seed = 7
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=validation_size,
-                                                        random_state=seed)
+    x = dataset.values[:, 0:3]
+    y = dataset.values[:, 3]
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2,
+                                                        random_state=0)
     algorithms = {
         'KNeighborsClassifier': KNeighborsClassifier,
         'LogisticRegression': LogisticRegression,

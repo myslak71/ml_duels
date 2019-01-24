@@ -82,7 +82,46 @@ class DuelDetail extends React.Component {
         )
     }
 
+    getPresentation = () => {
+        if (this.state.duel.user1 === undefined) {
+            return null
+        }
+
+        const column_names = ['User', 'Round 1', 'Round 2', 'Round 3'];
+        let columns = []
+        column_names.forEach(function (column_name) {
+            columns.push(
+                {
+                    title: column_name,
+                    dataIndex: column_name,
+                    key: column_name
+                }
+            )
+        });
+
+
+        const data = [
+            {
+                'User': this.state.duel.user1.username,
+                'Round 1': this.state.duel.user1_percentage[0],
+                'Round 2': this.state.duel.user1_percentage[1],
+                'Round 3': this.state.duel.user1_percentage[2],
+            },
+            {
+                'User': this.state.duel.user2.username,
+                'Round 1': this.state.duel.user2_percentage[0],
+                'Round 2': this.state.duel.user2_percentage[1],
+                'Round 3': this.state.duel.user2_percentage[2],
+            }
+        ]
+
+        return (
+            <Table columns={columns} dataSource={data}/>
+        )
+    }
+
     render() {
+        console.log(this.state.duel)
         if (this.state.duel.user1) {
             var title = `${this.state.duel.user1.username} vs ${this.state.duel.user2.username}`
         } else {
@@ -90,7 +129,7 @@ class DuelDetail extends React.Component {
         }
         return (
             <div>
-                {title}
+                {this.getPresentation()}
                 <Tabs defaultActiveKey="1">
                     <Tabs.TabPane tab="Scatter plot" key="1">
                         {/*<ScatterPlot plotId="kMeans" data={data} centroids= {centroids} />*/}
