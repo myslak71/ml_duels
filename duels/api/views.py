@@ -55,6 +55,12 @@ class DuelCreateView(CreateAPIView):
         serializer.save(user2=self.request.user)
 
 
+
+def count_percentage(algorithm):
+
+    return 'siema'
+
+
 class DuelUpdateView(UpdateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Duel.objects.all()
@@ -63,6 +69,7 @@ class DuelUpdateView(UpdateAPIView):
     def perform_update(self, serializer):
         instance = serializer.save()
         algorithm = Algorithm.objects.get(pk=self.request.data['algorithm'])
+        print(count_percentage(algorithm))
         instance.rounds.add(algorithm)
 
 
