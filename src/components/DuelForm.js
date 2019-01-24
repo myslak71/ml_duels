@@ -43,20 +43,15 @@ class DuelForm extends React.Component {
             Authorization: `Token ${this.props.token}`,
         };
 
-
-        await axios.post("http://127.0.0.1:8000/api/algorithm/create/", algorithm)
+        axios.post("http://127.0.0.1:8000/api/algorithm/create/", algorithm)
             .then(res => {
-                if (res.status === 201) {
-                    const algorithmId=res.data.id
-                }
-            })
-
-        await axios.put(`http://127.0.0.1:8000/api/duel/${duelID}/update/`, duel)
-            .then(res => {
-                if (res.status === 201) {
-                    const algorithmId=res.data.id
-                }
-            })
+                duel.algorithm = res.data.id
+                return duel
+            }).then(duel => {
+            axios.put(`http://127.0.0.1:8000/api/duel/${duelID}/update/`, duel)
+                .then(res => {
+                })
+        })
 
 
     };
