@@ -75,14 +75,12 @@ def count_percentage(duel, algorithm):
     dataset = pandas.read_csv(f'{MEDIA_ROOT}/{duel.dataset.dataset}')
 
     array = dataset.values
-    X = array[:, 0:3]
-    Y = array[:, 3]
+    x = array[:, 0:3]
+    y = array[:, 3]
     validation_size = 0.20
     seed = 7
-    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=validation_size,
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=validation_size,
                                                         random_state=seed)
-    scoring = 'accuracy'
-
     algorithms = {
         'KNeighborsClassifier': KNeighborsClassifier,
         'LogisticRegression': LogisticRegression,
@@ -94,10 +92,9 @@ def count_percentage(duel, algorithm):
         'MLPClassifier': MLPClassifier,
     }
 
-    print(algorithms[algorithm.get_name_display()]())
     model = algorithms[algorithm.get_name_display()](**algorithm.parameters)
-    model.fit(X_train, y_train)
-    return Decimal(100 * model.score(X_test, y_test)).quantize(Decimal('.001'))
+    model.fit(x_train, y_train)
+    return Decimal(100 * model.score(x_test, y_test)).quantize(Decimal('.001'))
 
 
 class DuelUpdateView(UpdateAPIView):
@@ -115,7 +112,6 @@ class DuelUpdateView(UpdateAPIView):
         else:
             duel.user2_percentage.append(percentage)
         duel.save()
-
 
 
 class DuelUserListView(ListAPIView):
