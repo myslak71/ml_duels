@@ -73,6 +73,10 @@ MEDIA_ROOT = settings.MEDIA_ROOT
 
 def count_percentage(duel, algorithm):
     dataset = pandas.read_csv(f'{MEDIA_ROOT}/{duel.dataset.dataset}')
+    if len(duel.user1_percentage) + len(duel.user2_percentage) < 2:
+        dataset = dataset[0:len(dataset) / 3]
+    elif len(duel.user1_percentage) + len(duel.user2_percentage) < 4
+        dataset = dataset[0:2 * len(dataset) / 3]
 
     array = dataset.values
     x = array[:, 0:3]
