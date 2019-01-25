@@ -6,7 +6,14 @@ import DuelForm from "../components/DuelForm";
 // import ScatterPlot from "../components/ScatterPlot"
 // import Matrix from "react-d3-scatterplot-matrix"
 import {Histogram, DensitySeries, BarSeries, withParentSize, XAxis, YAxis} from '@data-ui/histogram';
-import {VerticalBarSeries, XYPlot} from "react-vis";
+import {
+    HorizontalGridLines,
+    VerticalBarSeries,
+    VerticalGridLines,
+    VerticalRectSeries,
+    VerticalRectSeriesCanvas,
+    XYPlot
+} from "react-vis";
 
 class DuelDetail extends React.Component {
     state = {
@@ -133,6 +140,12 @@ class DuelDetail extends React.Component {
     };
 
 
+    getWhiskerPlot = () => {
+        return (
+            <BoxPlotSeriesExample/>
+        )
+    }
+
     getHistogram = (inputColor) => {
         if (this.state.dataset.data === undefined) {
             return null
@@ -141,25 +154,33 @@ class DuelDetail extends React.Component {
             return (
 
                 <Histogram
-                    width={1500}
+                    width={1200}
                     height={650}
                     {...rest}
                 />
             )
         })
+        let fill = null
+        if(inputColor==='R'){
+            fill = "#ff0000"
+        } else if(inputColor === 'G'){
+            fill = "#00ff00"
+        } else {
+            fill = '#0000ff'
+        }
 
         const colorData = [];
         this.state.dataset.data.forEach(function (row) {
-            colorData.push(row[inputColor])
+            colorData.push(row[inputColor]*1)
         })
-        console.log(colorData)
+        // const colorData = Array(100).fill().map(Math.random);
         return (
-            <ResponsiveHistogram>
+            <ResponsiveHistogram
                 ariaLabel={inputColor}
                 orientation="vertical"
                 cumulative={false}
-                normalized={true}
-                {/*binCount={25}*/}
+                normalized={false}
+                binCount={75}
                 binType="numeric"
                 renderTooltip={({event, datum, data, color}) => (
                 <div>
@@ -171,13 +192,14 @@ class DuelDetail extends React.Component {
             )}
                 >
                 <BarSeries
-                    fill="#ff0000"
+                    animated={true}
+                    fill={fill}
                     fillOpacity={0.3}
                     strokeWidth={0}
                     rawData={colorData}
                 />
                 <DensitySeries
-                    stroke="#e64980"
+                    stroke={fill}
                     showArea={false}
                     smoothing={0.01}
                     kernel="parabolic"
@@ -188,6 +210,7 @@ class DuelDetail extends React.Component {
             </ResponsiveHistogram>
         )
     }
+
 
 
     render() {
