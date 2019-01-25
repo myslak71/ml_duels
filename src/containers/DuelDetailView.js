@@ -6,14 +6,7 @@ import DuelForm from "../components/DuelForm";
 // import ScatterPlot from "../components/ScatterPlot"
 // import Matrix from "react-d3-scatterplot-matrix"
 import {Histogram, DensitySeries, BarSeries, withParentSize, XAxis, YAxis} from '@data-ui/histogram';
-import {
-    HorizontalGridLines,
-    VerticalBarSeries,
-    VerticalGridLines,
-    VerticalRectSeries,
-    VerticalRectSeriesCanvas,
-    XYPlot
-} from "react-vis";
+import {XYChart, CrossHair, LinearGradient, BoxPlotSeries} from '@data-ui/xy-chart';
 
 class DuelDetail extends React.Component {
     state = {
@@ -141,9 +134,36 @@ class DuelDetail extends React.Component {
 
 
     getWhiskerPlot = () => {
+        const timeSeriesData = [12, 54, 564,2,12,34,23]
         return (
-            <BoxPlotSeriesExample/>
-        )
+            <XYChart
+  ariaLabel="Bar chart showing ..."
+  width={400}
+  height={400}
+  xScale={{ type: 'time' }}
+  yScale={{ type: 'linear' }}
+  renderTooltip={({ event, datum, data, color }) => (
+    <div>
+      <strong style={{ color }}>{datum.label}</strong>
+      <div>
+        <strong>x </strong>
+        {datum.x}
+      </div>
+      <div>
+        <strong>y </strong>
+        {datum.y}
+      </div>
+    </div>
+  )}
+  snapTooltipToDataX
+>
+  <LinearGradient id="my_fancy_gradient" from={'#000000'} to={"#ffffff"} />
+  <XAxis label="X-axis Label" />
+  <YAxis label="Y-axis Label" />
+  <BarSeries data={timeSeriesData} fill="url('#my_fancy_gradient')" />
+  <CrossHair showHorizontalLine={false} fullHeight stroke="pink" />
+</XYChart>
+    )
     }
 
     getHistogram = (inputColor) => {
@@ -161,9 +181,9 @@ class DuelDetail extends React.Component {
             )
         })
         let fill = null
-        if(inputColor==='R'){
+        if (inputColor === 'R') {
             fill = "#ff0000"
-        } else if(inputColor === 'G'){
+        } else if (inputColor === 'G') {
             fill = "#00ff00"
         } else {
             fill = '#0000ff'
@@ -171,7 +191,7 @@ class DuelDetail extends React.Component {
 
         const colorData = [];
         this.state.dataset.data.forEach(function (row) {
-            colorData.push(row[inputColor]*1)
+            colorData.push(row[inputColor] * 1)
         })
         // const colorData = Array(100).fill().map(Math.random);
         return (
@@ -183,14 +203,14 @@ class DuelDetail extends React.Component {
                 binCount={75}
                 binType="numeric"
                 renderTooltip={({event, datum, data, color}) => (
-                <div>
-                    <strong style={{color}}>{datum.bin0} to {datum.bin1}</strong>
-                    <div><strong>count </strong>{datum.count}</div>
-                    <div><strong>cumulative </strong>{datum.cumulative}</div>
-                    <div><strong>density </strong>{datum.density}</div>
-                </div>
-            )}
-                >
+                    <div>
+                        <strong style={{color}}>{datum.bin0} to {datum.bin1}</strong>
+                        <div><strong>count </strong>{datum.count}</div>
+                        <div><strong>cumulative </strong>{datum.cumulative}</div>
+                        <div><strong>density </strong>{datum.density}</div>
+                    </div>
+                )}
+            >
                 <BarSeries
                     animated={true}
                     fill={fill}
@@ -212,7 +232,6 @@ class DuelDetail extends React.Component {
     }
 
 
-
     render() {
 
         console.log(this.state.duel)
@@ -231,17 +250,18 @@ class DuelDetail extends React.Component {
                     <Tabs.TabPane tab="Histogram" key="2">
                         <Tabs defaultActiveKey="1" tabPosition="left">
                             <Tabs.TabPane tab="R" key="1">
-                        {this.getHistogram('R')}
+                                {this.getHistogram('R')}
                             </Tabs.TabPane>
                             <Tabs.TabPane tab="G" key="2">
-                        {this.getHistogram('G')}
+                                {this.getHistogram('G')}
                             </Tabs.TabPane>
                             <Tabs.TabPane tab="B" key="3">
-                        {this.getHistogram('B')}
+                                {this.getHistogram('B')}
                             </Tabs.TabPane>
                         </Tabs>
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab="Whisker plot" key="3">Content of Tab Pane 3</Tabs.TabPane>
+                    <Tabs.TabPane tab="Whisker plot" key="3">
+                        {this.getWhiskerPlot()}                    </Tabs.TabPane>
                     <Tabs.TabPane tab="Scatter matrix" key="4">
                         {this.getDataSample()}
                     </Tabs.TabPane>
