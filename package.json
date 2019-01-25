@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@data-ui/histogram": "0.0.75",
+    "@data-ui/xy-chart": "0.0.75",
     "antd": "^3.7.3",
     "axios": "^0.18.0",
     "d3": "^5.7.0",
