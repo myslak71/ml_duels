@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from .models import Article, Duel
+from .models import Duel
 
-admin.site.register(Article)
 admin.site.register(Duel)
