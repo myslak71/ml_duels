@@ -6,7 +6,10 @@ import DuelForm from "../components/DuelForm";
 // import ScatterPlot from "../components/ScatterPlot"
 // import Matrix from "react-d3-scatterplot-matrix"
 import {Histogram, DensitySeries, BarSeries, withParentSize, XAxis, YAxis} from '@data-ui/histogram';
-import {XYChart, CrossHair, LinearGradient, BoxPlotSeries} from '@data-ui/xy-chart';
+import {XYChart, CrossHair, LinearGradient, BoxPlotSeries, PatternLines} from '@data-ui/xy-chart';
+import * as math from 'mathjs'
+import {genStats} from "@vx/mock-data";
+import * as stats from 'statsjs'
 
 class DuelDetail extends React.Component {
     state = {
@@ -133,37 +136,119 @@ class DuelDetail extends React.Component {
     };
 
 
+    renderBoxPlotTooltip({ datum, color }) {
+  const { x, y, min, max, median, firstQuartile, thirdQuartile, outliers } = datum;
+
+  const label = x || y;
+
+  return (
+    <div>
+      <div>
+        <strong style={{ color }}>{label}</strong>
+      </div>
+      {min && (
+        <div>
+          <strong style={{ color }}>Min </strong>
+          {min && min.toFixed ? min.toFixed(2) : min}
+        </div>
+      )}
+      {max && (
+        <div>
+          <strong style={{ color }}>Max </strong>
+          {max && max.toFixed ? max.toFixed(2) : max}
+        </div>
+      )}
+      {median && (
+        <div>
+          <strong style={{ color }}>Median </strong>
+          {median && median.toFixed ? median.toFixed(2) : median}
+        </div>
+      )}
+      {firstQuartile && (
+        <div>
+          <strong style={{ color }}>First quartile </strong>
+          {firstQuartile && firstQuartile.toFixed ? firstQuartile.toFixed(2) : firstQuartile}
+        </div>
+      )}
+      {thirdQuartile && (
+        <div>
+          <strong style={{ color }}>Third quartile </strong>
+          {thirdQuartile && thirdQuartile.toFixed ? thirdQuartile.toFixed(2) : thirdQuartile}
+        </div>
+      )}
+      {outliers && outliers.length > 0 && (
+        <div>
+          <strong style={{ color }}># Outliers </strong>
+          {outliers.length}
+        </div>
+      )}
+    </div>
+  );
+}
+
     getWhiskerPlot = () => {
-        const timeSeriesData = [12, 54, 564,2,12,34,23]
+        if (this.state.dataset.data === undefined) {
+            return null
+        }
+        let rgbArrays = [[], [], []]
+
+        this.state.dataset.data.forEach(function (el) {
+            rgbArrays[0].push(parseInt(el['R']))
+            rgbArrays[1].push(parseInt(el['G']))
+            rgbArrays[2].push(parseInt(el['B']))
+        })
+
+        rgbArrays = rgbArrays.map(array => stats(array))
+        let boxPlotObjects = []
+
+
+        let rgb = ['B', 'G', 'R']
+        rgbArrays.forEach(function (colorArray) {
+            let fill = null
+            if (rgb[rgb.length - 1] === 'R') {
+                fill = "#ff0000"
+            } else if (rgb[rgb.length - 1] === 'G') {
+                fill = "#00ff00"
+            } else {
+                fill = "#0000ff"
+            }
+            boxPlotObjects.push(
+                {
+                    x: rgb.pop(),
+                    min: colorArray.min(),
+                    max: colorArray.max(),
+                    median: colorArray.median(),
+                    outliers: [],
+                    firstQuartile: colorArray.q1(),
+                    thirdQuartile: colorArray.q3(),
+                    fill: fill,
+                    fillOpacity: 0.3
+                }
+            )
+        })
+
+        let arrayData = genStats(5)
+        arrayData = arrayData.map(el => el.boxPlot)
+        arrayData.forEach(function (el) {
+            el.outliers = []
+        })
+
         return (
             <XYChart
-  ariaLabel="Bar chart showing ..."
-  width={400}
-  height={400}
-  xScale={{ type: 'time' }}
-  yScale={{ type: 'linear' }}
-  renderTooltip={({ event, datum, data, color }) => (
-    <div>
-      <strong style={{ color }}>{datum.label}</strong>
-      <div>
-        <strong>x </strong>
-        {datum.x}
-      </div>
-      <div>
-        <strong>y </strong>
-        {datum.y}
-      </div>
-    </div>
-  )}
-  snapTooltipToDataX
->
-  <LinearGradient id="my_fancy_gradient" from={'#000000'} to={"#ffffff"} />
-  <XAxis label="X-axis Label" />
-  <YAxis label="Y-axis Label" />
-  <BarSeries data={timeSeriesData} fill="url('#my_fancy_gradient')" />
-  <CrossHair showHorizontalLine={false} fullHeight stroke="pink" />
-</XYChart>
-    )
+                height={650}
+                width={1200}
+                ariaLabel="Whisker plot"
+                xScale={{type: "band"}}
+                yScale={{type: "linear", domain: [0, 300]}}
+                showXGrid
+                showYGrid
+                renderTooltip={this.renderBoxPlotTooltip}
+            >
+                <BoxPlotSeries data={boxPlotObjects}/ >
+                <XAxis label=""/>
+                <YAxis label="Value"/>
+            </XYChart>
+        )
     }
 
     getHistogram = (inputColor) => {
@@ -234,7 +319,6 @@ class DuelDetail extends React.Component {
 
     render() {
 
-        console.log(this.state.duel)
         if (this.state.duel.user1) {
             var title = `${this.state.duel.user1.username} vs ${this.state.duel.user2.username}`
         } else {
@@ -262,7 +346,7 @@ class DuelDetail extends React.Component {
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="Whisker plot" key="3">
                         {this.getWhiskerPlot()}                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Scatter matrix" key="4">
+                    <Tabs.TabPane tab="Scatter matrix (work in progress)" disabled key="4">
                         {this.getDataSample()}
                     </Tabs.TabPane>
                 </Tabs>
