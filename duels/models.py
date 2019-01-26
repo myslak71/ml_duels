@@ -3,23 +3,6 @@ from django.contrib.postgres.fields import ArrayField, JSONField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-ROUNDS = (
-    (0, 'Not started'),
-    (1, 'Round 1'),
-    (2, 'Round 2'),
-    (3, 'Round 3'),
-    (4, 'Finished')
-)
-
-
-
-class Article(models.Model):
-    title = models.CharField(max_length=120)
-    content = models.TextField()
-
-    def __str__(self):
-        return self.title
-
 
 class Duel(models.Model):
     user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user1')
@@ -60,4 +43,3 @@ class Algorithm(models.Model):
 
     name = models.CharField(max_length=64, choices=ALGORITHM_NAME)
     parameters = JSONField()
-
