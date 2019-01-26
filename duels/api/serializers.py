@@ -5,13 +5,9 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from duels.models import Article, Duel, Dataset, Algorithm
+from duels.models import Duel, Dataset, Algorithm
 
 
-class ArticleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Article
-        fields = ('id', 'title', 'content')
 
 
 class UserSerializer(serializers.ModelSerializer):
