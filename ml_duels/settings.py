@@ -4,7 +4,7 @@ import django_heroku
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-05sgp9!deq=q1nltm@^^2cc+v29i(tyybv3v2t77qi66czaz3231dsdadasdasdas2j'
 DEBUG = True
-ALLOWED_HOSTS = ['ml-duels.herokuapp.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -111,7 +111,6 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
     '127.0.0.1:3000',
-    'https://ml-duels.herokuapp.com',
 )
 
 CSRF_COOKIE_NAME = "csrftoken"
