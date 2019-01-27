@@ -73,6 +73,7 @@ MEDIA_ROOT = settings.MEDIA_ROOT
 
 def count_percentage(duel, algorithm):
     dataset = pandas.read_csv(f'{MEDIA_ROOT}/{duel.dataset.dataset}')
+
     if len(duel.user1_percentage) + len(duel.user2_percentage) < 2:
         dataset = dataset[0:len(dataset) / 3]
     elif len(duel.user1_percentage) + len(duel.user2_percentage) < 4:
@@ -125,7 +126,6 @@ class DuelUserListView(ListAPIView):
         context['pass_username'] = True
         return context
 
-    # TODO filter duels with same user and dataset
     def get(self, request, *args, **kwargs):
         serializer = DuelSerializer(self.queryset.filter(Q(user1=self.request.user.pk) | Q(user2=self.request.user.pk)),
                                     many=True, context=self.get_serializer_context())
