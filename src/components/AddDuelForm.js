@@ -26,29 +26,20 @@ class AddDuelForm extends React.Component {
             dataset: this.state.dataset,
             rounds: []
         };
-        console.log(postObj)
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
         axios.defaults.headers = {
             "Content-Type": "application/json",
             Authorization: `Token ${this.props.token}`,
         };
+        
+        axios.post("http://127.0.0.1:8000/api/duel/create/", postObj)
+            .then(res => {
+                if (res.status === 201) {
+                    this.props.callBack()
+                }
+            })
 
-        if (requestType === "post") {
-            await axios.post("http://127.0.0.1:8000/api/duel/create/", postObj)
-                .then(res => {
-                    if (res.status === 201) {
-                        this.props.history.push(`/`);
-                    }
-                })
-        } else if (requestType === "put") {
-            await axios.put(`http://127.0.0.1:8000/api/duel/${duelID}/update/`, postObj)
-                .then(res => {
-                    if (res.status === 200) {
-                        this.props.history.push(`/`);
-                    }
-                })
-        }
     };
 
     handleUserChange(value) {
@@ -66,8 +57,6 @@ class AddDuelForm extends React.Component {
                     onSubmit={event =>
                         this.handleFormSubmit(
                             event,
-                            this.props.requestType,
-                            this.props.articleID
                         )
                     }
                 >

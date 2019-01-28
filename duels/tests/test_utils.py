@@ -19,3 +19,5 @@ class TestUtils(unittest.TestCase):
         duel = Duel.objects.get(pk=1)
         algorithm = Algorithm.objects.get(pk=1)
         self.assertEqual(count_percentage(duel, algorithm), 99.074)
+
+

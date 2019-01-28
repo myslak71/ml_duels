@@ -11,6 +11,13 @@ class DuelList extends React.Component {
         datasets: []
     };
 
+    update = () => {
+        const promises = [this.fetchDuels(), this.fetchUsers(), this.fetchDatasets()]
+        Promise.all(promises).then(([duelsResponse, usersResponse, datasetsResponse]) => {
+            this.setState({duels: duelsResponse.data, users: usersResponse.data, datasets: datasetsResponse.data});
+        });
+    }
+
     fetchDuels = () => {
         return axios.get("http://127.0.0.1:8000/api/duel/user/",
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
@@ -25,7 +32,7 @@ class DuelList extends React.Component {
         return axios.get("http://127.0.0.1:8000/api/dataset/",
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
     };
-    
+
     componentDidMount() {
         const promises = [this.fetchDuels(), this.fetchUsers(), this.fetchDatasets()]
         Promise.all(promises).then(([duelsResponse, usersResponse, datasetsResponse]) => {
@@ -40,7 +47,7 @@ class DuelList extends React.Component {
                 <Duels data={this.state.duels}/> <br/>
                 <h2> Add duel </h2>
                 <AddDuelForm users={this.state.users} datasets={this.state.datasets} requestType="post" articleID={null}
-                             btnText="Challenge"/>
+                             btnText="Challenge" callBack={this.update}/>
             </div>
         );
     }
