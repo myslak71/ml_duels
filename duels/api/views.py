@@ -1,7 +1,3 @@
-from decimal import Decimal
-
-import pandas as pandas
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Q
 from rest_framework import permissions
@@ -13,14 +9,8 @@ from rest_framework.generics import (
     UpdateAPIView
 )
 from rest_framework.response import Response
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import GaussianNB
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neural_network import MLPClassifier
-from sklearn.svm import LinearSVC
-from sklearn.tree import DecisionTreeClassifier
 
+from common.utils.count_percentage import count_percentage
 from duels.models import Duel, Dataset, Algorithm
 from .serializers import DuelSerializer, UserSerializer, DatasetSerializer, AlgorithmSerializer
 
@@ -64,39 +54,6 @@ class DuelCreateView(CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user2=self.request.user, user1_percentage=[], user2_percentage=[])
-
-
-from sklearn.model_selection import train_test_split
-
-MEDIA_ROOT = settings.MEDIA_ROOT
-
-
-def count_percentage(duel, algorithm):
-    dataset = pandas.read_csv(f'{MEDIA_ROOT}/{duel.dataset.dataset}')
-
-    if len(duel.user1_percentage) + len(duel.user2_percentage) < 2:
-        dataset = dataset[0:len(dataset) / 3]
-    elif len(duel.user1_percentage) + len(duel.user2_percentage) < 4:
-        dataset = dataset[0:2 * len(dataset) / 3]
-
-    x = dataset.values[:, 0:3]
-    y = dataset.values[:, 3]
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2,
-                                                        random_state=0)
-    algorithms = {
-        'KNeighborsClassifier': KNeighborsClassifier,
-        'LogisticRegression': LogisticRegression,
-        'LinearSVC': LinearSVC,
-        'GaussianNB': GaussianNB,
-        'DecisionTreeClassifier': DecisionTreeClassifier,
-        'RandomForestClassifier': RandomForestClassifier,
-        'GradientBoostingClassifier': GradientBoostingClassifier,
-        'MLPClassifier': MLPClassifier,
-    }
-
-    model = algorithms[algorithm.get_name_display()](**algorithm.parameters)
-    model.fit(x_train, y_train)
-    return Decimal(100 * model.score(x_test, y_test)).quantize(Decimal('.001'))
 
 
 class DuelUpdateView(UpdateAPIView):

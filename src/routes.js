@@ -10,7 +10,7 @@ import DuelList from "./containers/DuelListView";
 
 const BaseRouter = () => (
     <div>
-        <Route exact path="/" component={ArticleList}/>{" "}
+        <Route exact path="/" component={DuelList}/>{" "}
         <Route exact path="/articles/:articleID/" component={ArticleDetail}/>{" "}
         <Route exact path="/login/" component={Login}/>{" "}
         <Route exact path="/signup/" component={Signup}/>{" "}
