@@ -7,10 +7,11 @@ env:
   - DJANGO_VERSION=2.1.1
 cache: pip
 install:
-  - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
 before_script:
   - psql -c 'create database ml_duels;' -U postgres
 script:
   - python manage.py makemigrations
   - python manage.py migrate
   - python manage.py test duels
+after_success: coveralls
