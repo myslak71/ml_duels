@@ -9,7 +9,7 @@ cache: pip
 install:
   - pip install -r requirements.txt
 before_script:
-  - psql -c 'create database test_db;' -U postgres
+  - psql -c 'create database ml_duels;' -U postgres
 script:
   - python manage.py makemigrations
   - python manage.py migrate
