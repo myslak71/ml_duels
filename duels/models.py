@@ -10,13 +10,13 @@ class Duel(models.Model):
     rounds = models.ManyToManyField('Algorithm')
     dataset = models.ForeignKey('Dataset', on_delete=models.CASCADE)
     user1_percentage = ArrayField(
-        models.DecimalField(decimal_places=4, max_digits=6, validators=[MinValueValidator(0), MaxValueValidator(100)]),
+        models.DecimalField(decimal_places=3, max_digits=5, validators=[MinValueValidator(0), MaxValueValidator(100)]),
         size=3,
-        null=True)
+        null=True, default=list)
     user2_percentage = ArrayField(
-        models.DecimalField(decimal_places=4, max_digits=6, validators=[MinValueValidator(0), MaxValueValidator(100)]),
+        models.DecimalField(decimal_places=3, max_digits=5, validators=[MinValueValidator(0), MaxValueValidator(100)]),
         size=3,
-        null=True)
+        null=True, default=list)
     date_added = models.DateTimeField(auto_now_add=True)
 
 
