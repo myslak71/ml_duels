@@ -8,8 +8,7 @@ env:
 cache: pip
 install:
   - pip install -r requirements.txt
+before_script:
+  - psql -c 'create database ml-duels;' -U postgres
 script:
-
-  - python manage.py makemigrations
-  - python manage.py migrate
   - python manage.py test myApp
