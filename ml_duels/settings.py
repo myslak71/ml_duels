@@ -61,7 +61,7 @@ WSGI_APPLICATION = 'ml_duels.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'test_db',
+        'NAME': 'ml_duels',
         'USER': 'postgres',
         'PASSWORD': '',
         'HOST': 'localhost',
