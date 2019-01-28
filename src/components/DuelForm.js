@@ -94,7 +94,6 @@ class DuelForm extends React.Component {
 
 
     render() {
-        const parameters = this.state.parameters;
         return (
             <div>
                 <Form
@@ -107,12 +106,11 @@ class DuelForm extends React.Component {
                     }
                 >
                     <FormItem label="Algorithm">
-                        <Select name="user1" defaultValue="Wybierz"
+                        <Select name="user1" defaultValue="Choose an algorithm"
                                 onChange={this.handleAlgorithmChange}>
                             {this.props.algorithms.map(algorithm =>
                                 <Select.Option
                                     value={algorithm.name}
-                                    // parameters={algorithm.parameters}
                                 >{algorithm.name_display}</Select.Option>)}
                         </Select></FormItem>
                     <Form layout="inline">
