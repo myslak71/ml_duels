@@ -11,4 +11,4 @@ install:
 before_script:
   - psql -c 'create database travisdb;' -U postgres
 script:
-  - python manage.py test myApp
+  - python manage.py test duels
