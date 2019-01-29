@@ -11,7 +11,7 @@ from rest_framework.generics import (
 from rest_framework.response import Response
 
 from common.utils.count_percentage import count_percentage
-from duels.models import Duel, Dataset, Algorithm
+from duels.models import Duel, Dataset, Algorithm, DefaultAlgorithm
 from .serializers import DuelSerializer, UserSerializer, DatasetSerializer, AlgorithmSerializer
 
 
@@ -67,8 +67,10 @@ class DuelUpdateView(UpdateAPIView):
         duel.rounds.add(algorithm)
         percentage = count_percentage(duel, algorithm)
         if duel.user1 == self.request.user:
+            print(percentage)
             duel.user1_percentage.append(percentage)
         else:
+            print(percentage)
             duel.user2_percentage.append(percentage)
         duel.save()
 
@@ -114,7 +116,7 @@ class AlgorithmCreateView(CreateAPIView):
 
 class AlgorithmListView(ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
-    queryset = Algorithm.objects.all().filter(pk__gte=1, pk__lte=8)
+    queryset = DefaultAlgorithm.objects.all()
     serializer_class = AlgorithmSerializer
 
     def get_serializer_context(self):
