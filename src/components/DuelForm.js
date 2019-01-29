@@ -52,7 +52,7 @@ class DuelForm extends React.Component {
                 .then(res => {
                 })
         })
-
+        this.props.callBack()
 
     };
 

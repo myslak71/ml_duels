@@ -7,7 +7,6 @@ import DuelForm from "../components/DuelForm";
 // import Matrix from "react-d3-scatterplot-matrix"
 import {Histogram, DensitySeries, BarSeries, withParentSize, XAxis, YAxis} from '@data-ui/histogram';
 import {XYChart, CrossHair, LinearGradient, BoxPlotSeries, PatternLines} from '@data-ui/xy-chart';
-import * as math from 'mathjs'
 import {genStats} from "@vx/mock-data";
 import * as stats from 'statsjs'
 
@@ -17,6 +16,7 @@ class DuelDetail extends React.Component {
         dataset: [],
         algorithms: []
     };
+
 
     fetchDuel = () => {
         const duelID = this.props.match.params.duelID;
@@ -35,6 +35,16 @@ class DuelDetail extends React.Component {
             {'headers': {'Authorization': `Token ${localStorage.getItem('token')}`}})
     };
 
+    update = async() => {
+        let algorithms =  await this.fetchAlgorithms();
+        let duel =  await this.fetchDuel();
+        let dataset =  await this.fetchDataset(duel.data.dataset);
+        this.setState({
+            duel: duel.data,
+            dataset: dataset.data,
+            algorithms: algorithms.data
+        });
+    }
 
     async componentDidMount() {
         let algorithms = await this.fetchAlgorithms()
@@ -136,55 +146,55 @@ class DuelDetail extends React.Component {
     };
 
 
-    renderBoxPlotTooltip({ datum, color }) {
-  const { x, y, min, max, median, firstQuartile, thirdQuartile, outliers } = datum;
+    renderBoxPlotTooltip({datum, color}) {
+        const {x, y, min, max, median, firstQuartile, thirdQuartile, outliers} = datum;
 
-  const label = x || y;
+        const label = x || y;
 
-  return (
-    <div>
-      <div>
-        <strong style={{ color }}>{label}</strong>
-      </div>
-      {min && (
-        <div>
-          <strong style={{ color }}>Min </strong>
-          {min && min.toFixed ? min.toFixed(2) : min}
-        </div>
-      )}
-      {max && (
-        <div>
-          <strong style={{ color }}>Max </strong>
-          {max && max.toFixed ? max.toFixed(2) : max}
-        </div>
-      )}
-      {median && (
-        <div>
-          <strong style={{ color }}>Median </strong>
-          {median && median.toFixed ? median.toFixed(2) : median}
-        </div>
-      )}
-      {firstQuartile && (
-        <div>
-          <strong style={{ color }}>First quartile </strong>
-          {firstQuartile && firstQuartile.toFixed ? firstQuartile.toFixed(2) : firstQuartile}
-        </div>
-      )}
-      {thirdQuartile && (
-        <div>
-          <strong style={{ color }}>Third quartile </strong>
-          {thirdQuartile && thirdQuartile.toFixed ? thirdQuartile.toFixed(2) : thirdQuartile}
-        </div>
-      )}
-      {outliers && outliers.length > 0 && (
-        <div>
-          <strong style={{ color }}># Outliers </strong>
-          {outliers.length}
-        </div>
-      )}
-    </div>
-  );
-}
+        return (
+            <div>
+                <div>
+                    <strong style={{color}}>{label}</strong>
+                </div>
+                {min && (
+                    <div>
+                        <strong style={{color}}>Min </strong>
+                        {min && min.toFixed ? min.toFixed(2) : min}
+                    </div>
+                )}
+                {max && (
+                    <div>
+                        <strong style={{color}}>Max </strong>
+                        {max && max.toFixed ? max.toFixed(2) : max}
+                    </div>
+                )}
+                {median && (
+                    <div>
+                        <strong style={{color}}>Median </strong>
+                        {median && median.toFixed ? median.toFixed(2) : median}
+                    </div>
+                )}
+                {firstQuartile && (
+                    <div>
+                        <strong style={{color}}>First quartile </strong>
+                        {firstQuartile && firstQuartile.toFixed ? firstQuartile.toFixed(2) : firstQuartile}
+                    </div>
+                )}
+                {thirdQuartile && (
+                    <div>
+                        <strong style={{color}}>Third quartile </strong>
+                        {thirdQuartile && thirdQuartile.toFixed ? thirdQuartile.toFixed(2) : thirdQuartile}
+                    </div>
+                )}
+                {outliers && outliers.length > 0 && (
+                    <div>
+                        <strong style={{color}}># Outliers </strong>
+                        {outliers.length}
+                    </div>
+                )}
+            </div>
+        );
+    }
 
     getWhiskerPlot = () => {
         if (this.state.dataset.data === undefined) {
@@ -352,7 +362,7 @@ class DuelDetail extends React.Component {
                 </Tabs>
                 <DuelForm requestType="post" algorithms={this.state.algorithms} duel={this.state.duel}
                           duelID={this.props.match.params.duelID}
-                          btnText="Create"/>
+                          btnText="Create" callBack={this.update}/>
 
                 <form onSubmit={this.handleDelete}>
                     <Button type="danger" htmlType="submit">

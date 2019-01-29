@@ -35,6 +35,7 @@ class DuelList extends React.Component {
 
     componentDidMount() {
         const promises = [this.fetchDuels(), this.fetchUsers(), this.fetchDatasets()]
+        console.log(promises)
         Promise.all(promises).then(([duelsResponse, usersResponse, datasetsResponse]) => {
             this.setState({duels: duelsResponse.data, users: usersResponse.data, datasets: datasetsResponse.data});
         });
