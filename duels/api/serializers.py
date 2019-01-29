@@ -4,9 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from duels.models import Duel, Dataset, Algorithm
-
-
+from duels.models import Duel, Dataset, Algorithm, DefaultAlgorithm
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,3 +51,9 @@ class AlgorithmSerializer(serializers.ModelSerializer):
             choice = dict(Algorithm._meta.get_field('name').choices)[ret['name']]
             ret['name_display'] = choice
         return ret
+
+class DefaultAlgorithmSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DefaultAlgorithm
+        fields = ('__all__')
+
