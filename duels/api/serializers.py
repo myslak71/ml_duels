@@ -11,23 +11,17 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'date_joined')
+        read_only_fields = ('id', 'date_joined')
 
 
 class DuelSerializer(serializers.ModelSerializer):
     user1 = UserSerializer(read_only=True)
     user2 = UserSerializer(read_only=True)
-    # user2 = serializers.HyperlinkedRelatedField(read_only=True, view_name='siemku')
+
     class Meta:
         model = Duel
         fields = ('__all__')
         read_only_fields = ('rounds',)
-
-    # def to_representation(self, instance):
-    #     ret = super().to_representation(instance)
-    #     if self.context.get('pass_username'):
-    #         ret['user1'] = {'id': ret['user1'], 'username': User.objects.get(pk=ret['user1']).username}
-    #         ret['user2'] = {'id': ret['user2'], 'username': User.objects.get(pk=ret['user2']).username}
-    #     return ret
 
 
 class DatasetSerializer(serializers.ModelSerializer):
@@ -55,8 +49,8 @@ class AlgorithmSerializer(serializers.ModelSerializer):
             ret['name_display'] = choice
         return ret
 
+
 class DefaultAlgorithmSerializer(serializers.ModelSerializer):
     class Meta:
         model = DefaultAlgorithm
         fields = ('__all__')
-

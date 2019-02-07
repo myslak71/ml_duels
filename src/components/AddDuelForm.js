@@ -24,7 +24,7 @@ class AddDuelForm extends React.Component {
         const postObj = {
             user1: this.state.user1,
             dataset: this.state.dataset,
-            rounds: []
+            rounds: [],
         };
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
