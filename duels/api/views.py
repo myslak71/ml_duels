@@ -53,7 +53,9 @@ class DuelCreateView(CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
-        serializer.save(user2=self.request.user, user1_percentage=[], user2_percentage=[])
+        user1_id = self.request.data.get('user1')
+        user1 = User.objects.get(pk=user1_id)
+        serializer.save(user1=user1, user2=self.request.user, user1_percentage=[], user2_percentage=[])
 
 
 class DuelUpdateView(UpdateAPIView):
