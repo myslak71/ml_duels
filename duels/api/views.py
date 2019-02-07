@@ -69,18 +69,16 @@ class DuelUpdateView(UpdateAPIView):
         duel.rounds.add(algorithm)
         percentage = count_percentage(duel, algorithm)
         if duel.user1 == self.request.user:
-            print(percentage)
             duel.user1_percentage.append(percentage)
         else:
-            print(percentage)
             duel.user2_percentage.append(percentage)
         duel.save()
 
 
 class DuelUserListView(ListAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
