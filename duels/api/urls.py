@@ -6,7 +6,7 @@ from .views import (
 
 urlpatterns = [
     path('duel/create/', DuelCreateView.as_view()),
-    path('duel/user/', DuelUserListView.as_view()),
+    path('duel/user/', DuelUserListView.as_view(), name='siemku'),
     path('duel/<pk>', DuelDetailView.as_view()),
     path('duel/<pk>/update/', DuelUpdateView.as_view()),
     path('duel/<pk>/delete/', DuelDeleteView.as_view()),

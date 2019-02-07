@@ -61,6 +61,7 @@ class DuelUpdateView(UpdateAPIView):
     queryset = Duel.objects.all()
     serializer_class = DuelSerializer
 
+
     def perform_update(self, serializer):
         duel = serializer.save()
         algorithm = Algorithm.objects.get(pk=self.request.data['algorithm'])
