@@ -37,6 +37,7 @@ def count_percentage(duel, algorithm):
         'GradientBoostingClassifier': GradientBoostingClassifier,
         'MLPClassifier': MLPClassifier,
     }
+
     if algorithm.get_name_display() not in ('KNeighborsClassifier', 'GaussianNB'):
         algorithm.parameters.update({'random_state': 0})
     model = algorithms[algorithm.get_name_display()](**algorithm.parameters)

@@ -80,11 +80,6 @@ class DuelUserListView(ListAPIView):
     serializer_class = DuelSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['pass_username'] = True
-        return context
-
     def get(self, request, *args, **kwargs):
         serializer = DuelSerializer(self.queryset.filter(Q(user1=self.request.user.pk) | Q(user2=self.request.user.pk)),
                                     many=True, context=self.get_serializer_context())
