@@ -9,11 +9,14 @@ from duels.api.views import UserListView
 # class TestApiViews(unittest.TestCase):
 #     def test_user_list_view_valid(self):
 #         factory = APIRequestFactory()
-#         # user = User.objects.get(pk=1)
-#         view = UserListView.as_view()
-#         client = RequestsClient()
 #
-#         # request = factory.get('/api/duel/user/')
-#         # force_authenticate(request, user)
-#         response = view(request)
+#         request = factory.get('/api/duel/user/')
+#         result = UserListView().get(request)
+        # user = User.objects.get(pk=1)
+        # view = UserListView.as_view()
+        # client = RequestsClient()
+
+        # r
+        # force_authenticate(request, user)
+        # response = view(request)
 
