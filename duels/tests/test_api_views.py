@@ -4,7 +4,7 @@ from collections import OrderedDict
 from django.contrib.auth.models import User
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from duels.api.views import UserListView, DuelCreateView
+from duels.api.views import UserListView, DuelCreateView, AlgorithmCreateView
 from duels.models import Dataset
 
 
@@ -42,9 +42,19 @@ class TestApiViews(unittest.TestCase):
         view = DuelCreateView.as_view()
         response = view(request)
         response_gold = {'id': 1, 'user1': OrderedDict(
-            [('id', 2), ('username', 'test_user2'), ('date_joined', self.user2.date_joined.strftime('%Y-%m-%dT%H:%M:%S.%fZ'))]),
+            [('id', self.user2.id), ('username', 'test_user2'),
+             ('date_joined', self.user2.date_joined.strftime('%Y-%m-%dT%H:%M:%S.%fZ'))]),
                          'user2': OrderedDict(
-                             [('id', 1), ('username', 'test_user1'), ('date_joined', self.user1.date_joined.strftime('%Y-%m-%dT%H:%M:%S.%fZ'))]),
+                             [('id', self.user1.id), ('username', 'test_user1'),
+                              ('date_joined', self.user1.date_joined.strftime('%Y-%m-%dT%H:%M:%S.%fZ'))]),
                          'user1_percentage': [], 'user2_percentage': [], 'date_added': response.data['date_added'],
-                         'dataset': 1, 'rounds': []}
+                         'dataset': self.dataset.id, 'rounds': []}
         self.assertEqual(response.data, response_gold)
+
+    def test_algorithm_create_view_valid(self):
+        view = AlgorithmCreateView.as_view()
+        factory = APIRequestFactory()
+        request = factory.post('/api/duel/create/', {"name": 0, "parameters": {'n_neighbors': 5}}, format='json')
+        force_authenticate(request, self.user1)
+        response = view(request)
+        self.assertEqual(response.data, {'id': 1, 'name': '0', 'parameters': {'n_neighbors': 5}})
