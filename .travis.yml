@@ -13,5 +13,5 @@ before_script:
 script:
   - python manage.py makemigrations
   - python manage.py migrate
-  - coverage run --source=duels manage.py test
+  - coverage run --source=duels --branch manage.py test
 after_success: coveralls

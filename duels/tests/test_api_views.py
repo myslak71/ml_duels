@@ -27,3 +27,4 @@ class TestApiViews(unittest.TestCase):
         'date_joined', str(User.objects.get(username='test_user3').date_joined.strftime('%Y-%m-%dT%H:%M:%S.%fZ')))])
 
         self.assertEqual(response.data, [user2_gold, user3_gold])
+
