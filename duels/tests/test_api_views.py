@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 from duels.api.views import UserListView, DuelCreateView, AlgorithmCreateView, DuelUserListView
-from duels.models import Dataset
+from duels.models import Dataset, Duel
 
 
 class TestApiViews(unittest.TestCase):
@@ -60,8 +60,29 @@ class TestApiViews(unittest.TestCase):
         self.assertEqual(response.data, {'id': 1, 'name': '0', 'parameters': {'n_neighbors': 5}})
 
     def test_duel_user_list_view_valid(self):
+        duel1 = Duel.objects.create(user1=self.user1, user2=self.user2, dataset=self.dataset)
+        duel2 = Duel.objects.create(user1=self.user1, user2=self.user3, dataset=self.dataset)
         view = DuelUserListView.as_view()
         factory = APIRequestFactory()
-        request = factory.post('/api/duel/user/')
+        request = factory.get('/api/duel/user/')
         force_authenticate(request, self.user1)
-
+        response = view(request)
+        response_gold = [OrderedDict([('id', duel1.id), (
+            'user1', OrderedDict([('id', self.user1.id), ('username', 'test_user1'),
+                                  ('date_joined', self.user1.date_joined.strftime('%Y-%m-%dT%H:%M:%S.%fZ'))])),
+                                      ('user2', OrderedDict([('id', self.user2.id), ('username', 'test_user2'),
+                                                             ('date_joined', self.user2.date_joined.strftime(
+                                                                 '%Y-%m-%dT%H:%M:%S.%fZ'))])),
+                                      ('user1_percentage', []), ('user2_percentage', []),
+                                      ('date_added', duel1.date_added.strftime('%Y-%m-%dT%H:%M:%S.%fZ')),
+                                      ('dataset', self.dataset.id), ('rounds', [])]),
+                         OrderedDict([('id', duel2.id), ('user1', OrderedDict(
+                             [('id', self.user1.id), ('username', 'test_user1'),
+                              ('date_joined', self.user1.date_joined.strftime('%Y-%m-%dT%H:%M:%S.%fZ'))])),
+                                      ('user2', OrderedDict([('id', self.user3.id), ('username', 'test_user3'),
+                                                             ('date_joined', self.user3.date_joined.strftime(
+                                                                 '%Y-%m-%dT%H:%M:%S.%fZ'))])),
+                                      ('user1_percentage', []), ('user2_percentage', []),
+                                      ('date_added', duel2.date_added.strftime('%Y-%m-%dT%H:%M:%S.%fZ')),
+                                      ('dataset', self.dataset.id), ('rounds', [])])]
+        self.assertEqual(response.data, response_gold)
