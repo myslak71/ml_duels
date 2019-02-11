@@ -4,7 +4,7 @@ from collections import OrderedDict
 from django.contrib.auth.models import User
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from duels.api.views import UserListView, DuelCreateView, AlgorithmCreateView
+from duels.api.views import UserListView, DuelCreateView, AlgorithmCreateView, DuelUserListView
 from duels.models import Dataset
 
 
@@ -25,7 +25,7 @@ class TestApiViews(unittest.TestCase):
         factory = APIRequestFactory()
         view = UserListView.as_view()
 
-        request = factory.get('/api/duel/user/')
+        request = factory.get('/user/')
         force_authenticate(request, user=self.user1)
         response = view(request)
         user2_gold = OrderedDict([('id', self.user2.id), ('username', self.user2.username), (
@@ -58,3 +58,10 @@ class TestApiViews(unittest.TestCase):
         force_authenticate(request, self.user1)
         response = view(request)
         self.assertEqual(response.data, {'id': 1, 'name': '0', 'parameters': {'n_neighbors': 5}})
+
+    def test_duel_user_list_view_valid(self):
+        view = DuelUserListView.as_view()
+        factory = APIRequestFactory()
+        request = factory.post('/api/duel/user/')
+        force_authenticate(request, self.user1)
+
