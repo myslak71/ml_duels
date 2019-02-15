@@ -86,3 +86,5 @@ class TestApiViews(unittest.TestCase):
                                       ('date_added', duel2.date_added.strftime('%Y-%m-%dT%H:%M:%S.%fZ')),
                                       ('dataset', self.dataset.id), ('rounds', [])])]
         self.assertEqual(response.data, response_gold)
+
+
