@@ -10,9 +10,9 @@ from rest_framework.generics import (
 )
 from rest_framework.response import Response
 
-from common.utils.count_percentage import count_percentage
 from duels.models import Duel, Dataset, Algorithm, DefaultAlgorithm
 from .serializers import DuelSerializer, UserSerializer, DatasetSerializer, AlgorithmSerializer
+from common.utils.count_percentage import count_percentage
 
 
 class UserListView(ListAPIView):
