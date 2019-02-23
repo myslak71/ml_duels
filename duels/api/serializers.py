@@ -43,15 +43,8 @@ class AlgorithmSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
     def to_representation(self, instance):
-        algorithm = super().to_representation(instance)
+        algorithm_repr = super().to_representation(instance)
         if self.context.get('include_algorithm_name'):
-            choice = dict(Algorithm._meta.get_field('name').choices)[algorithm['name']]
-            algorithm['name_display'] = choice
-        return algorithm
-
-
-class DefaultAlgorithmSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DefaultAlgorithm
-        fields = ('__all__')
-        read_only_fields=('__all__')
+            algorithm_name = dict(Algorithm._meta.get_field('name').choices)[algorithm_repr['name']]
+            algorithm_repr['name_display'] = algorithm_name
+        return algorithm_repr

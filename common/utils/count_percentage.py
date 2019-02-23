@@ -42,4 +42,5 @@ def count_percentage(duel, algorithm):
         algorithm.parameters.update({'random_state': 0})
     model = algorithms[algorithm.get_name_display()](**algorithm.parameters)
     model.fit(x_train, y_train)
+
     return float(Decimal(100 * model.score(x_test, y_test)).quantize(Decimal('.001')))
