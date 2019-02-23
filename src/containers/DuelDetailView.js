@@ -3,13 +3,12 @@ import axios from "axios";
 import {connect} from "react-redux";
 import {Button, Tabs, Table, Divider, Tag, Card} from "antd";
 import DuelForm from "../components/DuelForm";
-// import ScatterPlot from "../components/ScatterPlot"
-// import Matrix from "react-d3-scatterplot-matrix"
 import {Histogram, DensitySeries, BarSeries, withParentSize, XAxis, YAxis} from '@data-ui/histogram';
 import {XYChart, CrossHair, LinearGradient, BoxPlotSeries, PatternLines} from '@data-ui/xy-chart';
 import {genStats} from "@vx/mock-data";
 import * as stats from 'statsjs'
-
+import ScatterPlot from "../components/ScatterPlot";
+import Matrix from 'react-d3-scatterplot-matrix'
 class DuelDetail extends React.Component {
     state = {
         duel: [],
@@ -287,8 +286,7 @@ class DuelDetail extends React.Component {
         const colorData = [];
         this.state.dataset.data.forEach(function (row) {
             colorData.push(row[inputColor] * 1)
-        })
-        // const colorData = Array(100).fill().map(Math.random);
+        });
         return (
             <ResponsiveHistogram
                 ariaLabel={inputColor}
@@ -330,10 +328,23 @@ class DuelDetail extends React.Component {
     render() {
 
         if (this.state.duel.user1) {
-            var title = `${this.state.duel.user1.username} vs ${this.state.duel.user2.username}`
+            const title = `${this.state.duel.user1.username} vs ${this.state.duel.user2.username}`
         } else {
-            var title = null
+            const title = null
         }
+        const data = [
+  {
+    "0" : 152.9655172413793,
+    "1" : 474.82758620689657,
+    "2" : 120.41379310344827,
+    "centroid" : 0
+  }
+]
+         const centroid = [
+  {
+    "centroid" : 0
+  }
+]
         return (
             <div>
                 {this.getPresentation()}
@@ -355,9 +366,10 @@ class DuelDetail extends React.Component {
                         </Tabs>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="Whisker plot" key="3">
-                        {this.getWhiskerPlot()}                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Scatter matrix (work in progress)" disabled key="4">
-                        {this.getDataSample()}
+                        {this.getWhiskerPlot()}
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Scatter matrix (work in progress)" key="4">
+                     <Matrix plotId="kMeans" data={data} centroids= {centroid}/>
                     </Tabs.TabPane>
                 </Tabs>
                 <DuelForm requestType="post" algorithms={this.state.algorithms} duel={this.state.duel}
