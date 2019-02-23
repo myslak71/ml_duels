@@ -46,13 +46,11 @@ circle.hidden {
 
 </style>
 <body>
-<script src="src/d3.v3.min.js"></script>
-<script>
+<script src="https://d3js.org/d3.v5.js"></script><script>
 
 var width = 960,
     size = 230,
     padding = 20;
-
 var x = d3.scale.linear()
     .range([padding / 2, size - padding / 2]);
 
@@ -72,14 +70,6 @@ var yAxis = d3.svg.axis()
 var color = d3.scale.category10();
 
 d3.csv("test.csv", function(error, data) {
-     // data = [{"R": "74", "G": "85", "B": "123", "result": "skin"},
-     //        {"R": "74", "G": "76", "B": "30", "result": "non-skin"},
-     //        {"R": "30", "G": "27", "B": "23", "result": "non-skin"},
-     //        {"R": "121", "G": "121", "B": "121", "result": "non-skin"},
-     //        {"R": "181", "G": "178", "B": "133", "result": "non-skin"},
-     //        {"R": "121", "G": "151", "B": "102", "result": "non-skin"},
-     //        {"R": "103", "G": "141", "B": "199", "result": "skin"}]
-     //    var centroids = [{"R": "74", "G": "85", "B": "123", "result": "skin"}]
     console.log(data[0])
   if (error) throw error;
 
