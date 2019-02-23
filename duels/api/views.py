@@ -97,11 +97,6 @@ class DuelDetailView(RetrieveAPIView):
     serializer_class = DuelSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['pass_username'] = True
-        return context
-
 
 class AlgorithmCreateView(CreateAPIView):
     queryset = Algorithm.objects.all()
