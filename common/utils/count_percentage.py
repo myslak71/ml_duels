@@ -14,6 +14,17 @@ from sklearn.tree import DecisionTreeClassifier
 
 MEDIA_ROOT = settings.MEDIA_ROOT
 
+ALGORITHMS = {
+    'KNeighborsClassifier': KNeighborsClassifier,
+    'LogisticRegression': LogisticRegression,
+    'LinearSVC': LinearSVC,
+    'GaussianNB': GaussianNB,
+    'DecisionTreeClassifier': DecisionTreeClassifier,
+    'RandomForestClassifier': RandomForestClassifier,
+    'GradientBoostingClassifier': GradientBoostingClassifier,
+    'MLPClassifier': MLPClassifier,
+}
+
 
 def count_percentage(duel, algorithm):
     dataset = pandas.read_csv(f'{MEDIA_ROOT}/{duel.dataset.dataset}')
@@ -27,20 +38,10 @@ def count_percentage(duel, algorithm):
     y = dataset.values[:, 3]
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2,
                                                         random_state=0)
-    algorithms = {
-        'KNeighborsClassifier': KNeighborsClassifier,
-        'LogisticRegression': LogisticRegression,
-        'LinearSVC': LinearSVC,
-        'GaussianNB': GaussianNB,
-        'DecisionTreeClassifier': DecisionTreeClassifier,
-        'RandomForestClassifier': RandomForestClassifier,
-        'GradientBoostingClassifier': GradientBoostingClassifier,
-        'MLPClassifier': MLPClassifier,
-    }
 
     if algorithm.get_name_display() not in ('KNeighborsClassifier', 'GaussianNB'):
         algorithm.parameters.update({'random_state': 0})
-    model = algorithms[algorithm.get_name_display()](**algorithm.parameters)
+    model = ALGORITHMS[algorithm.get_name_display()](**algorithm.parameters)
     model.fit(x_train, y_train)
 
     return float(Decimal(100 * model.score(x_test, y_test)).quantize(Decimal('.001')))
