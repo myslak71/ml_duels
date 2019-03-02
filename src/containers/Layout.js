@@ -38,7 +38,6 @@ class CustomLayout extends React.Component {
                         </Menu.Item>
 
 
-
                     </Menu>
                 </Header>
                 <Content style={{padding: '0 50px'}}>
@@ -58,6 +57,6 @@ const mapDispatchToProps = dispatch => {
     return {
         logout: () => dispatch(actions.logout())
     }
-}
+};
 
 export default withRouter(connect(null, mapDispatchToProps)(CustomLayout));
