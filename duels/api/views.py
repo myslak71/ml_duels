@@ -68,10 +68,12 @@ class DuelUpdateView(UpdateAPIView):
         algorithm = Algorithm.objects.get(pk=self.request.data['algorithm'])
         duel.rounds.add(algorithm)
         percentage = count_percentage(duel, algorithm)
+
         if duel.user1 == self.request.user:
             duel.user1_percentage.append(percentage)
         else:
             duel.user2_percentage.append(percentage)
+
         duel.save()
 
 
